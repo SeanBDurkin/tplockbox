@@ -4,8 +4,8 @@ interface
 
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
-  Dialogs, StdCtrls, TPLB3.CryptographicLibrary, TPLB3.BaseNonVisualComponent,
-  TPLB3.Codec;
+  Dialogs, StdCtrls, uTPLb_CryptographicLibrary, uTPLb_BaseNonVisualComponent,
+  uTPLb_Codec;
 
 type
   TmfmRSA_Encryption_Demo = class(TForm)
@@ -14,12 +14,11 @@ type
     memoResults: TMemo;
     DynamicallySetCodec: TCodec;
     libDemoLib: TCryptographicLibrary;
-    dlgOpenPlainOrCipher: TOpenDialog;
     procedure btnEncryptClick(Sender: TObject);
   private
     procedure Put( const Line: string);
     procedure PutFmt( const Line: string; const Args: array of const);
-    function  AcquireFileName( const Caption1: string; var FileName: string): boolean;
+
   public
     { Public declarations }
   end;
@@ -33,7 +32,7 @@ implementation
 
 
 
-uses TPLB3.Constants, TPLB3.StreamUtils, TPLB3.StreamCipher, TPLB3.Asymetric;
+uses uTPLb_Constants, uTPLb_StreamUtils, uTPLb_StreamCipher, uTPLb_Asymetric;
 {$R *.dfm}
 
 
@@ -66,21 +65,11 @@ Put( Format( Line, Args))
 end;
 
 
-function TmfmRSA_Encryption_Demo.AcquireFileName( const Caption1: string; var FileName: string): boolean;
-begin
-dlgOpenPlainOrCipher.Title := Caption1;
-result := dlgOpenPlainOrCipher.Execute;
-if result then
-  FileName := dlgOpenPlainOrCipher.FileName
-end;
-
 procedure TmfmRSA_Encryption_Demo.btnEncryptClick( Sender: TObject);
 var
   KeyAsStream: TStream;
   Key: TSymetricKey;
-  Ciphertext: utf8string;
-  PlaintextFileName: string;
-  CiphertextFileName: string;
+  Ciphertext: ansistring;
 begin
 // Prepare.
 memoResults.Clear;
@@ -103,10 +92,9 @@ finally
 // Now set the key.
 DynamicallySetCodec.InitFromKey( Key);
 
-if (not AcquireFileName( 'Plaintext', PlaintextFileName)) and
-   (not AcquireFileName( 'Ciphertext', CiphertextFileName)) then exit;
-
 try
+  // Assume you have set PlaintextFileName, CiphertextFileName
+  //  somewhere else.
   DynamicallySetCodec.EncryptFile( PlaintextFileName, CiphertextFileName);
   PutFmt( 'File succesfully encrypted to %s', [CiphertextFileName])
 except
@@ -114,7 +102,7 @@ except
   PutFmt( 'Encryption failed at %d plaintext bytes processed, ' +
           'probably due to a file access error.',
     [DynamicallySetCodec.CountBytesProcessed]);
-  DynamicallySetCodec.Reset
+  Reset
   end end;
 
 // Burn baby! Burn!
