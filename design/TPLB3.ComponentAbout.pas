@@ -98,8 +98,6 @@ type
     lblChainWikipedia: TLabel;
     lbxChainFeatures: TListBox;
     lblLogoAttribution: TLabel;
-    lblTpsfaIntro: TStaticText;
-    lblTpsfaContact: TStaticText;
     lblWebLabel: TStaticText;
     imgSean: TImage;
     memoExtraCipherDescription: TMemo;
