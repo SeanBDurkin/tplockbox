@@ -1,0 +1,144 @@
+﻿/* This stylesheet will only by loaded by phones. */
+
+@media orientation:portrait {
+  /* put portrain stuff here. */
+}
+
+@media orientation:landscape {
+  /* put landscape stuff here. */
+}
+
+nav
+{
+	height: 150px;
+	margin-bottom: 2em;
+}
+
+.nav-content
+{
+	opacity: 1.0;
+	text-align: left;
+	color: black;
+    background: #31E8D3;  
+    position: absolute;  
+    left: 10px; 
+    top: 10px;	
+    width: 700px;  
+}
+
+nav * h1
+{
+	float: left;
+	width: 154px;
+	margin: 0 4em 0 0;
+	padding: 0;
+	font-size: 100%
+}
+
+
+
+nav * dl
+{
+	float: left;
+	margin: 0;
+	padding: 10px 4em 1em 0;
+}
+
+nav * dt
+{
+	margin: 0;
+	padding: 0;
+	font-weight: bold;
+}
+
+nav * dd
+{
+	margin: 0;
+	padding: 0;
+}
+
+
+body
+{
+	margin: 0;
+	margin-bottom: 2em;
+	padding: 0;
+	background-color: #FFFFFF;
+	color: #000000;
+	font-family: Arial, Helvetica, sans-serif;
+	font-size: 80%;
+}
+
+body *
+{
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+.floatbox { overflow: hidden; }
+
+.submit { clear: left; }
+
+p
+{
+    position: relative;
+	top: 5px;
+	padding-bottom: 1em;
+}
+form
+{
+	margin-bottom: 3em;
+	margin-left: 10px;
+}
+
+
+fieldset
+{
+	float: left;
+	display: block;
+	width: 17em;
+	margin: 0 1em 1em 0;
+	padding: 0 1em 1em 1em;
+}
+
+fieldset.radio
+{
+	width: 15em;
+	margin: 1em 0 2em 0;
+}
+
+fieldset.radio input
+{
+	clear: both;
+	float: left;
+	width: auto;
+}
+
+fieldset.radio label
+{
+	font-weight: normal;
+}
+
+input
+{
+	display: block;
+	width: 15em;
+}
+
+label
+{
+	display: block;
+	margin-bottom: 1em;
+	font-weight: bold;
+}
+
+label.first
+{
+	padding-top: 1em;
+}
+
+select
+{
+	display: block;
+}
+

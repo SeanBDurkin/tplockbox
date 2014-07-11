@@ -1,0 +1,113 @@
+#!/usr/bin/bash
+#-----------------------------------------------------------------------------#
+# default settings
+#-----------------------------------------------------------------------------#
+VV="-vv"
+V="-v"
+
+
+COUNT=$#
+if [ $COUNT = "0" ];then
+  VERBOSE=none
+fi
+if [ $COUNT != "0" ];then
+  if [ $1 = $V ] || [ $1 = $VV ]; then
+    VERBOSE=$1
+  else
+    VERBOSE=none
+  fi
+fi
+
+if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+  echo -e 'find . -type f -iname "*~*" -print -exec rm -f {} \;'
+  find . -type f -iname "*~*" -print -exec rm -f {} \;
+fi
+find . -type f -iname "*~*" -exec rm -f {} \;
+
+if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+  echo -e 'find . -type f -iname "*.dcu" -print -exec rm -f {} \;'
+  find . -type f -iname "*.dcu" -print -exec rm -f {} \;
+fi
+find . -type f -iname "*.dcu" -exec rm -f {} \;
+
+if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+  echo -e 'find . -type f -iname "*.dpu" -print -exec rm -f {} \;'
+  find . -type f -iname "*.dpu" -print -exec rm -f {} \;
+fi
+find . -type f -iname "*.dpu" -exec rm -f {} \;
+
+if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+  echo -e 'find . -type f -iname "*.dcp" -print -exec rm -f {} \;'
+  find . -type f -iname "*.dcp" -print -exec rm -f {} \;
+fi
+find . -type f -iname "*.dcp" -exec rm -f {} \;
+
+if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+  echo -e 'find . -type f -iname "*.kof" -print -exec rm -f {} \;'
+  find . -type f -iname "*.kof" -print -exec rm -f {} \;
+fi
+find . -type f -iname "*.kof" -exec rm -f {} \;
+
+if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+  echo -e 'find . -type f -iname "*.scc" -print -exec rm -f {} \;'
+  find . -type f -iname "*.scc" -print -exec rm -f {} \;
+fi
+find . -type f -iname "*.scc" -exec rm -f {} \;
+
+if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+  echo -e 'find . -type f -perm -print -755 -exec rm -f {} \';
+  find . -type f -perm -755 -print -exec rm -f {} \;
+fi
+find . -type f -perm -755 -exec rm -f {} \;
+
+if [ -e "nohup.out" ]; then
+  if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+    echo -e 'rm nohup.out'
+  fi
+  rm nohup.out;
+fi
+
+if [ -e "clear" ]; then
+  if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+    echo -e 'rm clear';
+  fi
+  rm clear;
+fi
+
+if [ -e "CreateRPM" ]; then
+  if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+    echo -e 'rm CreateRPM';
+  fi
+  rm CreateRPM;
+fi
+
+if [ -e "CreateRPMs.sh" ]; then
+  if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+    echo -e 'rm CreateRPM.sh';
+  fi
+  rm CreateRPMs.sh;
+fi
+
+if [ -e "ExtraDeletes" ]; then
+  if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+    echo -e 'rm ExtraDeletes';
+  fi
+  rm ExtraDeletes;
+fi
+
+if [ -d "dunit" ]; then
+  if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+    echo -e 'rm -rf dunit';
+    rm -rvf dunit;
+  fi
+  rm -rf dunit;
+fi
+
+if [ -d "Help" ]; then
+  if [ $VERBOSE = $V ] || [ $VERBOSE = $VV ]; then
+    echo -e 'rm -rf Help';
+    rm -rvf Help;
+  fi
+  rm -rf Help;
+fi
+
