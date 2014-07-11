@@ -1,7 +1,7 @@
 unit uDemoBlockModeCipher;
 interface
-uses Classes, TPLB3.StreamCipher, TPLB3.BlockCipher,
-     TPLB3.SimpleBlockCipher, TPLB3.CryptographicLibrary;
+uses Classes, uTPLb_StreamCipher, uTPLb_BlockCipher,
+     uTPLb_SimpleBlockCipher, uTPLb_CryptographicLibrary;
 
 const
 

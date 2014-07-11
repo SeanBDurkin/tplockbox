@@ -2,15 +2,16 @@ program LockBox_DUnit_Tests;
 
 uses
   Forms,
-  GUITestRunner,
-  TestFramework,
-  uLockBox_TestCases in '..\..\unit-tests\dunit\uLockBox_TestCases.pas',
-  uLockBox_Signatory_TestCases in '..\..\unit-tests\dunit\uLockBox_Signatory_TestCases.pas',
-  uLockBox_RSA_TestCases in '..\..\unit-tests\dunit\uLockBox_RSA_TestCases.pas',
-  uLockBox_OpenSSLTestCases in '..\..\unit-tests\dunit\uLockBox_OpenSSLTestCases.pas',
-  uLockBox_HugeCardinalTestCases in '..\..\unit-tests\dunit\uLockBox_HugeCardinalTestCases.pas',
-  uLockBox_Hashes in '..\..\unit-tests\dunit\uLockBox_Hashes.pas',
-  uLockBox_CipherTestCases in '..\..\unit-tests\dunit\uLockBox_CipherTestCases.pas';
+  TestFramework in '..\..\..\..\..\dunit\src\TestFramework.pas',
+  GUITestRunner in '..\..\..\..\..\dunit\src\GUITestRunner.pas',
+  uLockBox_TestCases in '..\..\test\uLockBox_TestCases.pas',
+  uLockBox_CipherTestCases in '..\..\test\uLockBox_CipherTestCases.pas',
+  uLockBox_HugeCardinalTestCases in '..\..\test\uLockBox_HugeCardinalTestCases.pas',
+  uLockBox_RSA_TestCases in '..\..\test\uLockBox_RSA_TestCases.pas',
+  uLockBox_Signatory_TestCases in '..\..\test\uLockBox_Signatory_TestCases.pas',
+  uLockBox_Hashes in '..\..\test\uLockBox_Hashes.pas',
+  DUnitConsts in '..\..\..\..\..\dunit\src\DUnitConsts.pas',
+  uTPLb_SVN_Keywords in '..\..\run\utilities\uTPLb_SVN_Keywords.pas';
 
 {$R *.res}
 
