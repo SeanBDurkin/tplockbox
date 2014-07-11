@@ -1,6 +1,3 @@
-TurboPower LockBox 3 is free software being offered under a dual
-licensing scheme: LGPL3 or MPL1.1. This file describes the GPL base
-part of LGPL. Also see the "COPYING LESSER.txt" file.
                     GNU GENERAL PUBLIC LICENSE
                        Version 3, 29 June 2007
 
