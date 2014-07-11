@@ -1,0 +1,94 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+ <head>
+	<META HTTP-EQUIV="CONTENT-TYPE" CONTENT="text/html; charset=UTF-8">
+	<META NAME="ROBOTS" CONTENT="NOINDEX,NOFOLLOW,NOARCHIVE" />
+	<META NAME="DESCRIPTION" CONTENT="Tutorial and demostration page for Delphi (TurboPower LockBox3) to PHP symetric cryptography." />
+	<META NAME="AUTHOR" CONTENT="Sean B. Durkin">
+	<META HTTP-EQUIV="CACHE-CONTROL" CONTENT="NO-CACHE">
+    <META NAME="KEYWORDS" CONTENT="cryptography,delphi,php,turbopower,lockbox,lockbox3">
+	<title>Delphi-to-PHP Cryptography Tutorial</title>
+    <link rel="stylesheet" media="only screen and
+      (
+        ((max-device-width:  720px) and (orientation:portrait )) or
+        ((max-device-hieght: 720px) and (orientation:landscape))
+      )"
+           href="tut-phone.css" />
+  
+    <link rel="stylesheet" media="     
+        ((min-device-width:  721px) or (orientation:landscape)) and
+        ((min-device-hieght: 721px) or (orientation:portrait ))"
+           href="tut.css"/>  	
+ <head>
+ 
+<body>
+
+<nav>
+  <div class="nav-bg"></div>
+  <div class="nav-content">
+    <h1><a href="http://lockbox.seanbdurkin.id.au/tiki-index.php?page=Delphi-to-PHP+Tutorial+project+home" title="Go to The Delphi-to-PHP project home"><span class="hidden">Project home</span></a></h1>
+    <dl>
+      <dt>Date created</dt>
+      <dd><time datetime="2012-11-29">29-Nov-2012</time></dd>
+    </dl>
+    <dl>
+      <dt>Date last modified</dt>
+      <dd><time datetime="2012-11-29">29-Nov-2012</time></dd>
+    </dl>
+  </div>	
+</nav>
+
+<h1>Decrypt with PHP from Delphi (TurboPower LockBox3)</h1>
+<form id="plainForm" class="floatbox" action="">
+  <fieldset>
+    <legend>Crypto data</legend>
+	<label class="first" for="password">Password (UTF-8)
+	  <input id="password" name="password" type="text" placeholder="Enter TCodec password" />
+	</label>			
+    <fieldset class="radio">
+	  <legend>Transport encoding</legend>
+	    <label for="ciphertext-trans-base64">
+		  <input id="ciphertext-trans-base64" name="ciphertext-trans" type="radio"  checked="checked" />base64
+		</label>
+	    <label for="ciphertext-trans-hex">
+		  <input id="ciphertext-trans-hex" name="ciphertext-trans" type="radio" />hex
+		</label>
+	</fieldset>				
+	<label for="ciphertext">Ciphertext (transport encoded)
+	  <input id="ciphertext" name="ciphertext" type="text" placeholder="Paste ciphertext here" />
+	</label>			
+  </fieldset>
+  <fieldset>
+    <legend>Options</legend>
+    <fieldset class="radio">
+	  <legend>Chaining mode</legend>
+        <label for="chain-cfb">
+		  <input id="chain-cfb" name="chain" type="radio"  checked="checked" />CFB
+        </label>
+        <label for="chain-cbc">
+		  <input id="chain-cbc" name="chain" type="radio" />CBC
+        </label>
+    </fieldset>				
+  </fieldset>				
+  <input class="submit" type="submit" value="Decrypt" />
+</form>
+<hr />
+<h2>Output</h2>
+<h3>Summary</h3>
+<p>Cipher is <em>AES-256</em></p>
+<p>Given chain mode is <em>CFB</em></p>
+<p>Given password is <em>&apos;Yellow banana&apos;</em></p>
+<p>Ciphertext as hex is...</p>
+<code>010203 040506</code>
+<p></p>
+<p>Reconstructed plaintext message is <em>&apos;bla bla bla&apos;</em></p>
+<h2>Debug</h2>
+<p>Password as hex is...</p>
+<code>010203 040506</code>
+<p></p>
+<p>IV as hex is...</p>
+<code>010203 040506</code>
+<p>Raw reconstructed plaintext as hex is...</p>
+<code>010203 040506</code>
+</body> 
+</html>
