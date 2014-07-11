@@ -41,16 +41,12 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     TabOrder = 1
     object tbSymetric: TTabSheet
       Caption = '1. Symetric basics'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
       object lblPlaintextFile: TLabel
         Left = 3
-        Top = 152
+        Top = 128
         Width = 46
         Height = 13
         Caption = 'Plaintext:'
@@ -58,7 +54,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       end
       object lblCiphertextFile: TLabel
         Left = 3
-        Top = 176
+        Top = 152
         Width = 55
         Height = 13
         Caption = 'Ciphertext:'
@@ -66,7 +62,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       end
       object lblReconPlaintext: TLabel
         Left = 9
-        Top = 253
+        Top = 229
         Width = 73
         Height = 26
         Caption = 'Reconstructed plaintext:'
@@ -75,7 +71,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       end
       object shDivider_SymetricEncrypt: TShape
         Left = 4
-        Top = 234
+        Top = 210
         Width = 506
         Height = 4
         Anchors = [akLeft, akTop, akRight]
@@ -83,7 +79,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       end
       object shDivider_SymetricDecrypt: TShape
         Left = 4
-        Top = 311
+        Top = 287
         Width = 506
         Height = 4
         Anchors = [akLeft, akTop, akRight]
@@ -91,7 +87,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       end
       object edtPlaintextFile: TButtonedEdit
         Left = 64
-        Top = 149
+        Top = 125
         Width = 445
         Height = 21
         Anchors = [akLeft, akTop, akRight]
@@ -105,7 +101,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       end
       object edtCiphertextFile: TButtonedEdit
         Left = 64
-        Top = 176
+        Top = 152
         Width = 446
         Height = 21
         Anchors = [akLeft, akTop, akRight]
@@ -121,7 +117,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
         Left = 3
         Top = 16
         Width = 118
-        Height = 127
+        Height = 103
         Caption = 'Cipher'
         ItemIndex = 0
         Items.Strings = (
@@ -129,11 +125,9 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
           'AES-192'
           'AES-256'
           'DES'
-          '3DES (KO 1)'
-          '3DES (KO 2)'
+          '3DES (KR option 2)'
           'Blowfish'
-          'Twofish'
-          'XXTEA')
+          'Twofish')
         TabOrder = 2
         OnClick = rgCipherClick
       end
@@ -141,7 +135,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
         Left = 127
         Top = 16
         Width = 161
-        Height = 127
+        Height = 103
         Caption = 'Chaining mode'
         Columns = 2
         ItemIndex = 1
@@ -171,7 +165,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       end
       object btnSymetricEncrypt: TButton
         Left = 160
-        Top = 203
+        Top = 179
         Width = 75
         Height = 25
         Action = actEncryptSymetric
@@ -179,7 +173,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       end
       object edtReconPlaintext: TButtonedEdit
         Left = 90
-        Top = 250
+        Top = 226
         Width = 420
         Height = 21
         Anchors = [akLeft, akTop, akRight]
@@ -193,7 +187,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       end
       object btnSymetricDecrypt: TButton
         Left = 160
-        Top = 280
+        Top = 256
         Width = 75
         Height = 25
         Action = actSymetricDecrypt
@@ -201,7 +195,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       end
       object btnSymetricCompare: TButton
         Left = 160
-        Top = 344
+        Top = 320
         Width = 179
         Height = 25
         Action = actSymetricCompare
@@ -209,7 +203,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       end
       object btnSymetricEncrypt_Abort: TButton
         Left = 264
-        Top = 203
+        Top = 179
         Width = 75
         Height = 25
         Action = actSymetricEncrypt_Abort
@@ -217,7 +211,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       end
       object btnSymetricDecrypt_Abort: TButton
         Left = 264
-        Top = 280
+        Top = 256
         Width = 75
         Height = 25
         Action = actSymetricDecrypt_Abort
@@ -235,10 +229,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbSeeding: TTabSheet
       Caption = '2. Seeding'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object bvlScriblePad: TBevel
         Left = 4
         Top = 342
@@ -361,10 +351,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbSymetricExtent: TTabSheet
       Caption = '3. Symetric extensions'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -573,10 +559,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbKeyGen: TTabSheet
       Caption = '4. RSA - Key generation and storage'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -669,10 +651,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbSignature: TTabSheet
       Caption = '5. RSA - Signature && Verification'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -879,10 +857,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbHashes: TTabSheet
       Caption = '6. Hashes'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -893,14 +867,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
         Height = 13
         Caption = 'Source file:'
         FocusControl = edtHashSourceFile
-      end
-      object lblHashSourceString: TLabel
-        Left = 3
-        Top = 144
-        Width = 71
-        Height = 13
-        Caption = 'String to hash:'
-        FocusControl = edtHashSource
       end
       object edtHashSourceFile: TButtonedEdit
         Left = 64
@@ -917,11 +883,12 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
         OnRightButtonClick = edtHashSourceFileRightButtonClick
       end
       object btnHash: TButton
-        Left = 112
+        Left = 160
         Top = 57
-        Width = 123
+        Width = 75
         Height = 25
-        Action = actHash
+        Action = actEncryptSymetric
+        Caption = 'Hash'
         TabOrder = 1
       end
       object btnHashAbort: TButton
@@ -929,278 +896,8 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
         Top = 57
         Width = 75
         Height = 25
-        Action = actAbortHash
+        Action = actSymetricEncrypt_Abort
         TabOrder = 2
-      end
-      object edtHashSource: TEdit
-        Left = 80
-        Top = 144
-        Width = 298
-        Height = 21
-        Anchors = [akLeft, akTop, akRight]
-        TabOrder = 3
-        Text = 'abc'
-      end
-      object rgHashSource: TRadioGroup
-        Left = 384
-        Top = 144
-        Width = 126
-        Height = 65
-        Anchors = [akTop, akRight]
-        Caption = 'This string is of type ...'
-        ItemIndex = 0
-        Items.Strings = (
-          'Ansistring'
-          'UTF-16')
-        TabOrder = 4
-      end
-      object btnComputeHash: TButton
-        Left = 80
-        Top = 184
-        Width = 241
-        Height = 25
-        Caption = 'Compute SHA-384 hash of above string'
-        TabOrder = 5
-        OnClick = btnComputeHashClick
-      end
-    end
-    object tbOpenSSL: TTabSheet
-      Caption = '7. RSA via OpenSSL'
-      ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
-      DesignSize = (
-        512
-        523)
-      object lblOpenSSLDocument: TLabel
-        Left = 3
-        Top = 400
-        Width = 52
-        Height = 13
-        Caption = 'Document:'
-        FocusControl = edtOpenSSLDocument
-      end
-      object lblOpenSSLSignature: TLabel
-        Left = 3
-        Top = 427
-        Width = 50
-        Height = 13
-        Caption = 'Signature:'
-        FocusControl = edtOpenSSLSignature
-      end
-      object sepOpenSSLLibeay32: TShape
-        Left = 4
-        Top = 130
-        Width = 506
-        Height = 4
-        Anchors = [akLeft, akTop, akRight]
-        Brush.Color = clBlack
-      end
-      object Shape4: TShape
-        Left = 4
-        Top = 244
-        Width = 506
-        Height = 4
-        Anchors = [akLeft, akTop, akRight]
-        Brush.Color = clBlack
-      end
-      object Shape5: TShape
-        Left = 3
-        Top = 348
-        Width = 506
-        Height = 4
-        Anchors = [akLeft, akTop, akRight]
-        Brush.Color = clBlack
-      end
-      object btnOpenSSLLoadLib: TButton
-        Left = 103
-        Top = 75
-        Width = 75
-        Height = 25
-        Action = actOpenSSLLoadLib
-        TabOrder = 0
-      end
-      object edtOpenSSLLibPath: TLabeledEdit
-        Left = 3
-        Top = 48
-        Width = 506
-        Height = 21
-        Anchors = [akLeft, akTop, akRight]
-        EditLabel.Width = 276
-        EditLabel.Height = 13
-        EditLabel.Caption = 'Path to libeay32.dll (leave empty to search system path):'
-        TabOrder = 1
-        Text = 'V:\projects\openssl\win32 binaries\bin'
-      end
-      object btnOpenSSLUnloadLib: TButton
-        Left = 199
-        Top = 75
-        Width = 75
-        Height = 25
-        Action = actOpenSSLUnloadLib
-        TabOrder = 2
-      end
-      object btnOpenSSLGenKey: TButton
-        Left = 3
-        Top = 176
-        Width = 205
-        Height = 25
-        Action = actOpenSSLGenKey
-        TabOrder = 3
-      end
-      object btnOpenSSLLoadPrivateKey: TButton
-        Left = 239
-        Top = 176
-        Width = 107
-        Height = 25
-        Action = actOpenSSLLoadPrivateKey
-        TabOrder = 4
-      end
-      object btnOpenSSLLoadPublicKey: TButton
-        Left = 376
-        Top = 176
-        Width = 121
-        Height = 25
-        Action = actOpenSSLLoadPublicKey
-        TabOrder = 5
-      end
-      object btnOpenSSLSavePrivateKey: TButton
-        Left = 239
-        Top = 296
-        Width = 107
-        Height = 25
-        Action = actOpenSSLSavePrivateKey
-        TabOrder = 6
-      end
-      object btnOpenSSLSavePublicKey: TButton
-        Left = 376
-        Top = 296
-        Width = 121
-        Height = 25
-        Action = actOpenSSLSavePublicKey
-        TabOrder = 7
-      end
-      object edtOpenSSLDocument: TButtonedEdit
-        Left = 64
-        Top = 397
-        Width = 445
-        Height = 21
-        Anchors = [akLeft, akTop, akRight]
-        HideSelection = False
-        Images = imglstActionGlyphs_16x16
-        RightButton.ImageIndex = 0
-        RightButton.Visible = True
-        TabOrder = 8
-        Text = '<Enter plaintext filename to encrypt.>'
-        OnRightButtonClick = edtOpenSSLDocumentRightButtonClick
-      end
-      object btnOpenSSLSign: TButton
-        Left = 239
-        Top = 472
-        Width = 107
-        Height = 25
-        Action = actOpenSSLSign
-        TabOrder = 9
-      end
-      object btnOpenSSLVerify: TButton
-        Left = 376
-        Top = 472
-        Width = 121
-        Height = 25
-        Action = actOpenSSLVerify
-        TabOrder = 10
-      end
-      object edtOpenSSLSignature: TButtonedEdit
-        Left = 65
-        Top = 424
-        Width = 445
-        Height = 21
-        Anchors = [akLeft, akTop, akRight]
-        HideSelection = False
-        Images = imglstActionGlyphs_16x16
-        RightButton.ImageIndex = 0
-        RightButton.Visible = True
-        TabOrder = 11
-        Text = '<Enter plaintext filename to encrypt.>'
-        OnRightButtonClick = edtOpenSSLSignatureRightButtonClick
-      end
-      object rgOpenSSLHash: TRadioGroup
-        Left = 0
-        Top = 451
-        Width = 157
-        Height = 57
-        Caption = 'Hash for document'
-        ItemIndex = 0
-        Items.Strings = (
-          'SHA-1'
-          'MD5')
-        TabOrder = 12
-      end
-      object pnlOpenSSLLibSection: TPanel
-        Left = 3
-        Top = 3
-        Width = 294
-        Height = 22
-        Caption = 'Linking to the OpenSSL library (libeay32.dll)'
-        Color = clMoneyGreen
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clNavy
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentBackground = False
-        ParentFont = False
-        TabOrder = 13
-      end
-      object pnlOpenSSLKeyAcquisitionHeading: TPanel
-        Left = 3
-        Top = 140
-        Width = 294
-        Height = 22
-        Caption = 'Key acquisition'
-        Color = clMoneyGreen
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clNavy
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentBackground = False
-        ParentFont = False
-        TabOrder = 14
-      end
-      object pnlOpenSSLKeySaving: TPanel
-        Left = 3
-        Top = 255
-        Width = 294
-        Height = 22
-        Caption = 'Key saving'
-        Color = clMoneyGreen
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clNavy
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentBackground = False
-        ParentFont = False
-        TabOrder = 15
-      end
-      object pnlOpenSSLSignatureAndVerification: TPanel
-        Left = 3
-        Top = 358
-        Width = 294
-        Height = 22
-        Caption = 'Signature && Verification'
-        Color = clMoneyGreen
-        Font.Charset = DEFAULT_CHARSET
-        Font.Color = clNavy
-        Font.Height = -11
-        Font.Name = 'Tahoma'
-        Font.Style = [fsBold]
-        ParentBackground = False
-        ParentFont = False
-        TabOrder = 16
       end
     end
   end
@@ -1395,71 +1092,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       OnExecute = actSignVerifyAbortExecute
       OnUpdate = actSignVerifyAbortUpdate
     end
-    object actHash: TAction
-      Category = 'Hash'
-      Caption = 'Hash with SHA-1'
-      OnExecute = actHashExecute
-    end
-    object actAbortHash: TAction
-      Category = 'Hash'
-      Caption = 'Abort'
-      OnExecute = actAbortHashExecute
-      OnUpdate = actAbortHashUpdate
-    end
-    object actOpenSSLLoadLib: TAction
-      Category = 'OpenSSL'
-      Caption = 'Load library'
-      OnExecute = actOpenSSLLoadLibExecute
-      OnUpdate = actOpenSSLLoadLibUpdate
-    end
-    object actOpenSSLUnloadLib: TAction
-      Category = 'OpenSSL'
-      Caption = 'Unload library'
-      OnExecute = actOpenSSLUnloadLibExecute
-      OnUpdate = actOpenSSLUnloadLibUpdate
-    end
-    object actOpenSSLGenKey: TAction
-      Category = 'OpenSSL'
-      Caption = 'Generate a 2048 bit key pair'
-      OnExecute = actOpenSSLGenKeyExecute
-      OnUpdate = actOpenSSLGenKeyUpdate
-    end
-    object actOpenSSLLoadPrivateKey: TAction
-      Category = 'OpenSSL'
-      Caption = 'Load private key'
-      OnExecute = actOpenSSLLoadPrivateKeyExecute
-      OnUpdate = actOpenSSLLoadPrivateKeyUpdate
-    end
-    object actOpenSSLLoadPublicKey: TAction
-      Category = 'OpenSSL'
-      Caption = 'Load public key'
-      OnExecute = actOpenSSLLoadPublicKeyExecute
-      OnUpdate = actOpenSSLLoadPublicKeyUpdate
-    end
-    object actOpenSSLSavePrivateKey: TAction
-      Category = 'OpenSSL'
-      Caption = 'Save private key'
-      OnExecute = actOpenSSLSavePrivateKeyExecute
-      OnUpdate = actOpenSSLSavePrivateKeyUpdate
-    end
-    object actOpenSSLSavePublicKey: TAction
-      Category = 'OpenSSL'
-      Caption = 'Save public key'
-      OnExecute = actOpenSSLSavePublicKeyExecute
-      OnUpdate = actOpenSSLSavePublicKeyUpdate
-    end
-    object actOpenSSLSign: TAction
-      Category = 'OpenSSL'
-      Caption = 'Sign'
-      OnExecute = actOpenSSLSignExecute
-      OnUpdate = actOpenSSLSignUpdate
-    end
-    object actOpenSSLVerify: TAction
-      Category = 'OpenSSL'
-      Caption = 'Verify'
-      OnExecute = actOpenSSLVerifyExecute
-      OnUpdate = actOpenSSLVerifyUpdate
-    end
   end
   object imglstActionGlyphs_16x16: TImageList
     Left = 576
@@ -1609,25 +1241,22 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
   end
   object codecMainDemo: TCodec
     AsymetricKeySizeInBits = 1024
-    AdvancedOptions2 = []
     CryptoLibrary = CryptographicLibrary1
     OnProgress = codecMainDemoProgress
     Left = 592
     Top = 264
-    StreamCipherId = 'native.XXTEA.Large.Littleend'
-    BlockCipherId = ''
+    StreamCipherId = 'native.StreamToBlock'
+    BlockCipherId = 'native.AES-192'
     ChainId = 'native.CBC'
   end
   object ScribbleHash: THash
     CryptoLibrary = CryptographicLibrary1
-    OnProgress = ScribbleHashProgress
     Left = 664
     Top = 264
     HashId = 'native.hash.SHA-1'
   end
   object codecCustomBlock: TCodec
     AsymetricKeySizeInBits = 1024
-    AdvancedOptions2 = []
     CryptoLibrary = CryptographicLibrary1
     OnProgress = codecMainDemoProgress
     Left = 592
@@ -1638,12 +1267,11 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
   end
   object Signatory1: TSignatory
     Codec = codecRSA
-    Left = 624
+    Left = 680
     Top = 408
   end
   object codecRSA: TCodec
     AsymetricKeySizeInBits = 1024
-    AdvancedOptions2 = []
     CryptoLibrary = CryptographicLibrary1
     OnProgress = codecMainDemoProgress
     Left = 568
@@ -1651,35 +1279,5 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     StreamCipherId = 'native.RSA'
     BlockCipherId = ''
     ChainId = 'native.CBC'
-  end
-  object StringHash: THash
-    CryptoLibrary = CryptographicLibrary1
-    Left = 680
-    Top = 192
-    HashId = 'native.hash.SHA-384'
-  end
-  object Sig: TOpenSSL_Signatory
-    LibPath = 'V:\projects\openssl\win32 binaries'
-    LibName = 'libeay32.dll'
-    RequiredVersion = '1.0.0.0'
-    OnProgress = SigProgress
-    AsymetricKeySizeInBits = 2048
-    PrivateKeyStorageCipher = cipher_InTheClear
-    Left = 688
-    Top = 408
-  end
-  object dlgOpenPEM: TOpenDialog
-    DefaultExt = 'PEM'
-    Filter = 'PEM file|*.PEM|Any file|*.*'
-    Options = [ofHideReadOnly, ofFileMustExist, ofEnableSizing]
-    Left = 560
-    Top = 472
-  end
-  object dlgSavePEM: TSaveDialog
-    DefaultExt = 'PEM'
-    Filter = 'PEM file|*.PEM|Any file|*.*'
-    Options = [ofOverwritePrompt, ofHideReadOnly, ofPathMustExist, ofEnableSizing]
-    Left = 648
-    Top = 472
   end
 end

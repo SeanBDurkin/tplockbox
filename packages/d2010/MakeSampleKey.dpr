@@ -2,7 +2,7 @@ program MakeSampleKey;
 
 uses
   Forms,
-  umfmMakeSampleKey in '..\..\ancillary-applications\umfmMakeSampleKey.pas' {mfmMakeSampleKey};
+  umfmMakeSampleKey in '..\..\test\umfmMakeSampleKey.pas' {mfmMakeSampleKey};
 
 {$R *.res}
 
