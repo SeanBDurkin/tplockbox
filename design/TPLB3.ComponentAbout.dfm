@@ -2204,10 +2204,6 @@ object TPLb_fmComponentAbout: TTPLb_fmComponentAbout
       object tsWelcome: TTabSheet
         Caption = 'Welcome'
         ImageIndex = 1
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object browserIntro: TWebBrowser
           Left = 104
           Top = 0
@@ -2260,10 +2256,6 @@ object TPLb_fmComponentAbout: TTPLb_fmComponentAbout
       object tsProject: TTabSheet
         Caption = 'Project'
         ImageIndex = 2
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object Label4: TLabel
           Left = 0
           Top = 3
@@ -2280,9 +2272,9 @@ object TPLb_fmComponentAbout: TTPLb_fmComponentAbout
         object lblWebsite: TLabel
           Left = 3
           Top = 312
-          Width = 250
+          Width = 221
           Height = 13
-          Caption = 'http://sourceforge.net/projects/tplockbox/'
+          Caption = 'https://code.google.com/p/tplockbox/'
           Font.Charset = DEFAULT_CHARSET
           Font.Color = clWindowText
           Font.Height = -11
@@ -2303,10 +2295,7 @@ object TPLb_fmComponentAbout: TTPLb_fmComponentAbout
             
               'legal incorporation. It is an informal organisation with no defi' +
               'ned membership. The TPLB3 product is owned by the '
-            
-              'individual contributors to its parts. The Project on SourceForge' +
-              ' is administered by the TurboPower SourceForge '
-            'Administrator (tpsfadmin).'
+            'individual contributors to its parts.'
             ''
             
               'LockBox was originally produced and released by TurboPower Softw' +
@@ -2324,7 +2313,7 @@ object TPLb_fmComponentAbout: TTPLb_fmComponentAbout
               'rivative work of LockBox 2 and does not share any'
             
               'common code, but the mission of the library remains the same. An' +
-              ' exception is the unit DCPtwofish_LB3Modified'
+              ' exception is the unit TPLB3.DCP.twofish_Modified'
             
               'which is a modified version of a file from David Barton'#39's DCPCry' +
               'pt package. The original unit of this was'
@@ -2333,48 +2322,18 @@ object TPLb_fmComponentAbout: TTPLb_fmComponentAbout
           ScrollBars = ssVertical
           TabOrder = 0
         end
-        object lblTpsfaIntro: TStaticText
-          Left = 3
-          Top = 255
-          Width = 356
-          Height = 17
-          Caption = 
-            'The TurboPower Source Forge Administrator (tpsfa) can be contact' +
-            'ed at:'
-          TabOrder = 1
-        end
-        object lblTpsfaContact: TStaticText
-          Left = 3
-          Top = 272
-          Width = 335
-          Height = 17
-          Cursor = crHandPoint
-          Caption = 'http://sourceforge.net/sendmessage.php?touser=625421'
-          Font.Charset = DEFAULT_CHARSET
-          Font.Color = clBlue
-          Font.Height = -11
-          Font.Name = 'Tahoma'
-          Font.Style = [fsBold, fsUnderline]
-          ParentFont = False
-          TabOrder = 2
-          OnClick = lblTpsfaContactClick
-        end
         object lblWebLabel: TStaticText
           Left = 3
           Top = 295
-          Width = 177
+          Width = 174
           Height = 17
-          Caption = 'TPLB3 on SourceForge is located at:'
-          TabOrder = 3
+          Caption = 'TPLB3 on GoogleCode is located at:'
+          TabOrder = 1
         end
       end
       object tsCopyLeft: TTabSheet
         Caption = 'Statement of copying permission'
         ImageIndex = 3
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         DesignSize = (
           631
           380)
@@ -2384,19 +2343,19 @@ object TPLb_fmComponentAbout: TTPLb_fmComponentAbout
           Width = 370
           Height = 13
           Caption = 
-            'Copyright 2009..2011 Sean B. Durkin (except for portions marked ' +
+            'Copyright 2009..2014 Sean B. Durkin (except for portions marked ' +
             'otherwise)'
         end
         object Label8: TLabel
           Left = 3
           Top = 18
-          Width = 625
-          Height = 26
+          Width = 614
+          Height = 24
           Caption = 
             'The below copyright applies to all the source code and compiled ' +
-            'binaries of the TPBL3 project, except the DCPtwofish_LB3Modified' +
-            ' unit which comes with its own statement of copying permission i' +
-            'n its header comment.'
+            'binaries of the TPBL3 project, except the TPLB3.DCP.twofish_Modi' +
+            'fied unit which comes with its own statement of copying permissi' +
+            'on in its header comment.'
           WordWrap = True
         end
         object Label9: TLabel
@@ -2492,10 +2451,6 @@ object TPLb_fmComponentAbout: TTPLb_fmComponentAbout
       object tsAuthors: TTabSheet
         Caption = 'Authors'
         ImageIndex = 4
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         DesignSize = (
           631
           380)
@@ -2866,10 +2821,6 @@ object TPLb_fmComponentAbout: TTPLb_fmComponentAbout
       object tsSupport: TTabSheet
         Caption = 'Support'
         ImageIndex = 5
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object memoSupport: TMemo
           Left = 3
           Top = 24
@@ -2918,10 +2869,6 @@ object TPLb_fmComponentAbout: TTPLb_fmComponentAbout
       object tsAlgorithms: TTabSheet
         Caption = 'Algorithms'
         ImageIndex = 6
-        ExplicitLeft = 0
-        ExplicitTop = 0
-        ExplicitWidth = 0
-        ExplicitHeight = 0
         object Panel1: TPanel
           Left = 3
           Top = 16
