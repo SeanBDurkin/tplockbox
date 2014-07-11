@@ -23,7 +23,7 @@ package dclTP_LockBox3;
 {$MINENUMSIZE 1}
 {$IMAGEBASE $400000}
 {$DESCRIPTION 'TurboPower LockBox 3 design-time package'}
-{$LIBSUFFIX '_D2010'}
+{$LIBSUFFIX '_d2010'}
 {$DESIGNONLY}
 {$IMPLICITBUILD OFF}
 
@@ -35,9 +35,9 @@ requires
   TP_LockBox3;
 
 contains
-  TPLB3.ComponentRegistration in '..\..\design\TPLB3.ComponentRegistration.pas',
-  TPLB3.ComponentEditors in '..\..\design\TPLB3.ComponentEditors.pas',
-  TPLB3.ComponentAbout in '..\..\design\TPLB3.ComponentAbout.pas' {TPLb_fmComponentAbout},
-  TPLB3.InfoUtils in '..\..\design\TPLB3.InfoUtils.pas';
+  uTPLb_ComponentRegistration in '..\..\design\uTPLb_ComponentRegistration.pas',
+  uTPLb_ComponentEditors in '..\..\design\uTPLb_ComponentEditors.pas',
+  uTPLb_ComponentAbout in '..\..\design\uTPLb_ComponentAbout.pas' {TPLb_fmComponentAbout},
+  uTPLb_InfoUtils in '..\..\design\uTPLb_InfoUtils.pas';
 
 end.

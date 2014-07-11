@@ -41,10 +41,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     TabOrder = 1
     object tbSymetric: TTabSheet
       Caption = '1. Symetric basics'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -235,10 +231,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbSeeding: TTabSheet
       Caption = '2. Seeding'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object bvlScriblePad: TBevel
         Left = 4
         Top = 342
@@ -361,10 +353,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbSymetricExtent: TTabSheet
       Caption = '3. Symetric extensions'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -573,10 +561,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbKeyGen: TTabSheet
       Caption = '4. RSA - Key generation and storage'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -669,10 +653,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbSignature: TTabSheet
       Caption = '5. RSA - Signature && Verification'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -879,10 +859,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbHashes: TTabSheet
       Caption = '6. Hashes'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -967,10 +943,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbOpenSSL: TTabSheet
       Caption = '7. RSA via OpenSSL'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)

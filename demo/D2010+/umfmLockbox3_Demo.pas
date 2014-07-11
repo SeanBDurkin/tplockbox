@@ -5,10 +5,9 @@ interface
 uses
   Windows, Messages, SysUtils, Variants, Classes, Graphics, Controls, Forms,
   Dialogs, StdCtrls, ComCtrls, ActnList, StdActns, ImgList,
-  PlatformDefaultStyleActnCtrls, ActnMan, ExtCtrls,
-  TPLB3.Signatory, TPLB3.OpenSSL, TPLB3.Hash,
-  TPLB3.Codec, TPLB3.BaseNonVisualComponent, TPLB3.CryptographicLibrary,
-  System.Actions;
+  PlatformDefaultStyleActnCtrls, ActnMan, ExtCtrls, uTPLb_Codec,
+  uTPLb_BaseNonVisualComponent, uTPLb_CryptographicLibrary, uTPLb_Hash,
+  uTPLb_Signatory, uTPLb_OpenSSL;
 
 type
   TOperation = ( opIdle, opSymetricEncrypt, opSymetricDecrypt,
@@ -318,11 +317,11 @@ var
 
 implementation
 
-uses TPLB3.Random, uDemoBlockModeCipher, TPLB3.Constants, TPLB3.Asymetric,
-  TPLB3.StreamUtils, TPLB3.StreamCipher, TPLB3.CodecIntf,
-  TPLB3.DES, TPLB3.StreamToBlock, TPLB3.AES, TPLB3.CBC,
+uses uTPLb_Random, uDemoBlockModeCipher, uTPLb_Constants, uTPLb_Asymetric,
+  uTPLb_StreamUtils, uTPLb_StreamCipher, uTPLb_CodecIntf,
+  uTPLb_DES, uTPLb_StreamToBlock, uTPLb_AES, uTPLb_CBC,
 
-  TPLB3.XXTEA, Types;
+  uTPLb_XXTEA, Types;
 {$R *.dfm}
 
 procedure TmfmLockbox3_Demo.FormCreate( Sender: TObject );
@@ -558,7 +557,7 @@ var
   Sz: Int64;
 begin
   Busy;
-  Sz := TPLB3.StreamUtils.FileSize( edtPlaintextFile.Text );
+  Sz := uTPLb_StreamUtils.FileSize( edtPlaintextFile.Text );
   CurrentOperation := opSymetricEncrypt;
   try
     FdidPressAbortEncrypt := False;
@@ -675,7 +674,7 @@ begin
     LogFmt
       ( 'Decrypting file "%s" to "%s" using %s cipher and %s chaining mode.', [edtCiphertextFile.Text, edtReconPlaintext.Text, codecMainDemo.Cipher, codecMainDemo.ChainMode] );
     LogFmt( 'Ciphertext size = %d bytes.',
-      [TPLB3.StreamUtils.FileSize( edtCiphertextFile.Text )] );
+      [uTPLb_StreamUtils.FileSize( edtCiphertextFile.Text )] );
 
     codecMainDemo.DecryptFile( edtReconPlaintext.Text, edtCiphertextFile.Text );
 
@@ -1134,7 +1133,7 @@ var
   Sz: Int64;
 begin
   Busy;
-  Sz := TPLB3.StreamUtils.FileSize( edtRSAPlaintextFile.Text );
+  Sz := uTPLb_StreamUtils.FileSize( edtRSAPlaintextFile.Text );
   CurrentOperation := opRSAEncrypt;
   try
     FdidPressAbortEncrypt := False;
@@ -1225,7 +1224,7 @@ begin
     LogFmt( 'Decrypting file "%s" to "%s" using %s cipher.',
       [edtRSACiphertextFile.Text, edtRSAReconFile.Text, codecRSA.Cipher] );
     LogFmt( 'Ciphertext size = %d bytes.',
-      [TPLB3.StreamUtils.FileSize( edtRSACiphertextFile.Text )] );
+      [uTPLb_StreamUtils.FileSize( edtRSACiphertextFile.Text )] );
 
     pbarRSA.Max := 0;
     codecRSA.DecryptFile( edtRSAReconFile.Text, edtRSACiphertextFile.Text );
@@ -1270,7 +1269,7 @@ var
   DestinFileMode: word;
 begin
   Busy;
-  Sz := TPLB3.StreamUtils.FileSize( edtRSADocumentFile.Text );
+  Sz := uTPLb_StreamUtils.FileSize( edtRSADocumentFile.Text );
   CurrentOperation := opSign;
   try
     FdidPressAbortEncrypt := False;
@@ -1346,7 +1345,7 @@ var
   Res: TVerifyResult;
 begin
   Busy;
-  Sz := TPLB3.StreamUtils.FileSize( edtRSADocumentFile.Text );
+  Sz := uTPLb_StreamUtils.FileSize( edtRSADocumentFile.Text );
   CurrentOperation := opVerify;
   try
     FdidPressAbortEncrypt := False;
