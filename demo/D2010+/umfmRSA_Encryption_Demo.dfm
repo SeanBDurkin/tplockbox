@@ -63,7 +63,6 @@ object mfmRSA_Encryption_Demo: TmfmRSA_Encryption_Demo
   end
   object DynamicallySetCodec: TCodec
     AsymetricKeySizeInBits = 1024
-    AdvancedOptions2 = []
     CryptoLibrary = libDemoLib
     Left = 104
     Top = 208
@@ -74,9 +73,5 @@ object mfmRSA_Encryption_Demo: TmfmRSA_Encryption_Demo
   object libDemoLib: TCryptographicLibrary
     Left = 200
     Top = 208
-  end
-  object dlgOpenPlainOrCipher: TOpenDialog
-    Left = 272
-    Top = 136
   end
 end

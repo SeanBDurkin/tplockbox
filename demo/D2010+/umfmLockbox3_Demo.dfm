@@ -27,7 +27,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     Lines.Strings = (
       '[Output log goes here.]')
     ReadOnly = True
-    ScrollBars = ssVertical
+    ScrollBars = ssBoth
     TabOrder = 0
   end
   object pcClient: TPageControl
@@ -41,10 +41,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     TabOrder = 1
     object tbSymetric: TTabSheet
       Caption = '1. Symetric basics'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -967,10 +963,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbOpenSSL: TTabSheet
       Caption = '7. RSA via OpenSSL'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -1609,7 +1601,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
   end
   object codecMainDemo: TCodec
     AsymetricKeySizeInBits = 1024
-    AdvancedOptions2 = []
     CryptoLibrary = CryptographicLibrary1
     OnProgress = codecMainDemoProgress
     Left = 592
@@ -1627,7 +1618,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
   end
   object codecCustomBlock: TCodec
     AsymetricKeySizeInBits = 1024
-    AdvancedOptions2 = []
     CryptoLibrary = CryptographicLibrary1
     OnProgress = codecMainDemoProgress
     Left = 592
@@ -1643,7 +1633,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
   end
   object codecRSA: TCodec
     AsymetricKeySizeInBits = 1024
-    AdvancedOptions2 = []
     CryptoLibrary = CryptographicLibrary1
     OnProgress = codecMainDemoProgress
     Left = 568
@@ -1662,9 +1651,9 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     LibPath = 'V:\projects\openssl\win32 binaries'
     LibName = 'libeay32.dll'
     RequiredVersion = '1.0.0.0'
-    OnProgress = SigProgress
     AsymetricKeySizeInBits = 2048
     PrivateKeyStorageCipher = cipher_InTheClear
+    OnProgress = SigProgress
     Left = 688
     Top = 408
   end
