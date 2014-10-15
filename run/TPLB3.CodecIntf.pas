@@ -29,6 +29,7 @@ and earlier was TurboPower Software.
  * ***** END LICENSE BLOCK ***** *}
 
 unit TPLB3.CodecIntf;
+{$M-}
 interface
 uses Classes, TPLB3.StreamCipher, TPLB3.BlockCipher,
      TPLB3.CryptographicLibrary;
