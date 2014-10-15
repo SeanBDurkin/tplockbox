@@ -31,7 +31,11 @@ and earlier was TurboPower Software.
 unit TPLB3.CryptographicLibrary;
 interface
 uses Classes, TPLB3.BaseNonVisualComponent, TPLB3.StreamCipher,
-     TPLB3.BlockCipher, contnrs, TPLB3.HashDsc, TPLB3.SimpleBlockCipher;
+     TPLB3.BlockCipher, contnrs, TPLB3.HashDsc, TPLB3.SimpleBlockCipher
+     {$if compilerversion >= 27.0}
+       , Types
+     {$ifend}
+     ;
 
 type
 
@@ -1065,6 +1069,26 @@ end;
 
 const MaxDepth = 10;
 
+{$HINTS OFF}
+// Why are HINTS OFF for this method?
+// The normal way users are expected to use this library, is that
+//  TP_LockBox_XXX.bpl is compiled and the dcu files are built in some location.
+//  When the developer compiles an application which uses LockBox, it is
+//  assumed that the said dcu location is on the Library Path for the given
+//  platform, but the location of the LockBox source files (Run directory) is NOT.
+// In this normal mode, there are no issues with hints.
+//
+// Some developers may prefer to include the location of the location of the
+//  LockBox source in the Library Path for the platform. This is a valid thing
+//  to do, but it changes the compiler behaviour. If the developer does this
+//  (Source on path), AND this $HINTS OFF directive was not used, AND
+//  Types is not included in the uses clause of this unit, when compiling the
+//  application which uses LockBox, the compiler (XE6 or later) may emit this
+//  hint ...
+//
+// [dcc32 Hint] TPLB3.CryptographicLibrary.pas(1116): H2443 Inline function 'TObjectList.Remove' has not been expanded because unit 'System.Types' is not specified in USES list
+//
+// The hint is not useful, so we suppress it.
 procedure TCryptographicLibrary.SetParentLibrary( Value: TCryptographicLibrary);
 var
   Depth, DepthDown, DepthDown1, DepthDown2, DepthUp: integer;
@@ -1129,6 +1153,7 @@ if assigned( FParentLibrary) then
   end;
 
 end;
+{$HINTS ON}
 
 
 procedure TCryptographicLibrary.Notification(
