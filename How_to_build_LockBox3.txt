@@ -13,7 +13,7 @@ To build TurboPower LockBox 3, follow these steps.
 
 4. Install the main design-time package.
 
-5. Use and enjoy!
+5. Use and enjoy !
 
 
 Package, Application and Group heads
