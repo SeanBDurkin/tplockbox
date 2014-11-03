@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.SHA2;
 
 // Note to the curious:
@@ -46,7 +48,9 @@ unit TPLB3.SHA2;
   {$A8,B-,C-,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y+,Z1}
   {$MINSTACKSIZE $00004000}
   {$MAXSTACKSIZE $00100000}
-  {$IMAGEBASE $00400000}
+  {$IFDEF MSWINDOWS}
+    {$IMAGEBASE $00400000}
+  {$ENDIF}
   {$APPTYPE GUI}
   {$WARN SYMBOL_DEPRECATED ON}
   {$WARN SYMBOL_LIBRARY ON}
@@ -103,7 +107,9 @@ unit TPLB3.SHA2;
   {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y+,Z1}
   {$MINSTACKSIZE $00004000}
   {$MAXSTACKSIZE $00100000}
-  {$IMAGEBASE $00400000}
+  {$IFDEF MSWINDOWS}
+    {$IMAGEBASE $00400000}
+  {$ENDIF}
   {$APPTYPE GUI}
   {$WARN SYMBOL_DEPRECATED ON}
   {$WARN SYMBOL_LIBRARY ON}
@@ -166,7 +172,9 @@ unit TPLB3.SHA2;
   {$A8,B-,C-,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N+,O+,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y+,Z1}
   {$MINSTACKSIZE $00004000}
   {$MAXSTACKSIZE $00100000}
-  {$IMAGEBASE $00400000}
+  {$IFDEF MSWINDOWS}
+    {$IMAGEBASE $00400000}
+  {$ENDIF}
   {$APPTYPE GUI}
   {$WARN SYMBOL_DEPRECATED ON}
   {$WARN SYMBOL_LIBRARY ON}
@@ -240,7 +248,9 @@ unit TPLB3.SHA2;
   {$A8,B-,C+,D+,E-,F-,G+,H+,I+,J-,K-,L+,M-,N-,O-,P+,Q-,R-,S-,T-,U-,V+,W-,X+,Y+,Z1}
   {$MINSTACKSIZE $00004000}
   {$MAXSTACKSIZE $00100000}
-  {$IMAGEBASE $00400000}
+  {$IFDEF MSWINDOWS}
+    {$IMAGEBASE $00400000}
+  {$ENDIF}
   {$APPTYPE GUI}
   {$WARN SYMBOL_DEPRECATED ON}
   {$WARN SYMBOL_LIBRARY ON}
@@ -385,8 +395,8 @@ TSHA2_BaseHasher = class( TInterfacedObject, IHasher)
     procedure  Update( Source{in}: TMemoryStream);  virtual; abstract;
     procedure  End_Hash( PartBlock{in}: TMemoryStream; Digest: TStream);  virtual; abstract;
     procedure  Burn;                              virtual; abstract;
-    function   SelfTest_Source: utf8string;       virtual; abstract;
-    function   SelfTest_ReferenceHashValue: utf8string;  virtual; abstract;
+    function   SelfTest_Source: string;           virtual; abstract;
+    function   SelfTest_ReferenceHashValue: string; virtual; abstract;
   end;
 
 
@@ -398,16 +408,16 @@ TSHA256 = class( TSHA2_BaseHasher)
     procedure  Update( Source{in}: TMemoryStream); override;
     procedure  End_Hash( PartBlock{in}: TMemoryStream; Digest: TStream);  override;
     procedure  Burn;                              override;
-    function   SelfTest_Source: utf8string;       override;
-    function   SelfTest_ReferenceHashValue: utf8string;  override;
+    function   SelfTest_Source: string;             override;
+    function   SelfTest_ReferenceHashValue: string; override;
   end;
 
 
 TSHA224 = class( TSHA256)
   protected
     procedure  InitHashVectors;                          override;
-    function   SelfTest_Source: utf8string;              override;
-    function   SelfTest_ReferenceHashValue: utf8string;  override;
+    function   SelfTest_Source: string;                  override;
+    function   SelfTest_ReferenceHashValue: string;      override;
   end;
 
 
@@ -419,32 +429,32 @@ TSHA512 = class( TSHA2_BaseHasher)
     procedure  Update( Source{in}: TMemoryStream); override;
     procedure  End_Hash( PartBlock{in}: TMemoryStream; Digest: TStream);  override;
     procedure  Burn;                              override;
-    function   SelfTest_Source: utf8string;       override;
-    function   SelfTest_ReferenceHashValue: utf8string;  override;
+    function   SelfTest_Source: string;             override;
+    function   SelfTest_ReferenceHashValue: string; override;
   end;
 
 
 TSHA384 = class( TSHA512)
   protected
     procedure  InitHashVectors;                          override;
-    function   SelfTest_Source: utf8string;              override;
-    function   SelfTest_ReferenceHashValue: utf8string;  override;
+    function   SelfTest_Source: string;                  override;
+    function   SelfTest_ReferenceHashValue: string;      override;
   end;
 
 
 TSHA512_224 = class( TSHA512)
   protected
     procedure  InitHashVectors;                          override;
-    function   SelfTest_Source: utf8string;              override;
-    function   SelfTest_ReferenceHashValue: utf8string;  override;
+    function   SelfTest_Source: string;                  override;
+    function   SelfTest_ReferenceHashValue: string;      override;
   end;
 
 
 TSHA512_256 = class( TSHA512)
   protected
     procedure  InitHashVectors;                          override;
-    function   SelfTest_Source: utf8string;              override;
-    function   SelfTest_ReferenceHashValue: utf8string;  override;
+    function   SelfTest_Source: string;                  override;
+    function   SelfTest_ReferenceHashValue: string;      override;
   end;
 
 
@@ -1035,13 +1045,13 @@ FillChar( FH, SizeOf( FH), 0);
 FisEnding := False
 end;
 
-function TSHA256.SelfTest_Source: utf8string;
+function TSHA256.SelfTest_Source: string;
 begin
 result := 'abc'
 end;
 
 
-function TSHA256.SelfTest_ReferenceHashValue: utf8string;
+function TSHA256.SelfTest_ReferenceHashValue: string;
 begin
 result := 'BA7816BF 8F01CFEA ' +
           '414140DE 5DAE2223 B00361A3 96177A9C B410FF61 F20015AD'
@@ -1063,7 +1073,7 @@ FH[h] := $befa4fa4
 end;
 
 
-function TSHA224.SelfTest_Source: utf8string;
+function TSHA224.SelfTest_Source: string;
 begin
 result := 'abc'
 // Two block alternative:
@@ -1071,7 +1081,7 @@ result := 'abc'
 end;
 
 
-function TSHA224.SelfTest_ReferenceHashValue: utf8string;
+function TSHA224.SelfTest_ReferenceHashValue: string;
 begin
 result := '23097D22 3405D822 8642A477 BDA255B3 2AADBCE4 BDA0B3F7 E36C9DA7'
 // Two block alternative:
@@ -1197,13 +1207,13 @@ FillChar( FH, SizeOf( FH), 0);
 FisEnding := False
 end;
 
-function TSHA512.SelfTest_Source: utf8string;
+function TSHA512.SelfTest_Source: string;
 begin
 result := 'abc'
 end;
 
 
-function TSHA512.SelfTest_ReferenceHashValue: utf8string;
+function TSHA512.SelfTest_ReferenceHashValue: string;
 begin
 result := 'DDAF35A1 93617ABA CC417349 AE204131 ' +
           '12E6FA4E 89A97EA2 0A9EEEE6 4B55D39A 2192992A 274FC1A8 ' +
@@ -1239,7 +1249,7 @@ FH[h] := {<UtoS_Cnvt>}uint64( $47B5481DBEFA4FA4){</UtoS_Cnvt>}
 end;
 
 
-function TSHA384.SelfTest_Source: utf8string;
+function TSHA384.SelfTest_Source: string;
 begin
 result := 'abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijk' +
  'lmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu'
@@ -1247,7 +1257,7 @@ result := 'abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijk' +
 end;
 
 
-function TSHA384.SelfTest_ReferenceHashValue: utf8string;
+function TSHA384.SelfTest_ReferenceHashValue: string;
 begin
 result := '09330C33 F71147E8 3D192FC7 82CD1B47 53111B17 3B3B05D2 ' +
           '2FA08086 E3B0F712 FCC7C71A 557E2DB9 66C3E9FA 91746039'
@@ -1282,13 +1292,13 @@ end;
 
 
 
-function TSHA512_224.SelfTest_Source: utf8string;
+function TSHA512_224.SelfTest_Source: string;
 begin
 result := 'abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhi' +
  'jklmnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu'
 end;
 
-function TSHA512_224.SelfTest_ReferenceHashValue: utf8string;
+function TSHA512_224.SelfTest_ReferenceHashValue: string;
 begin
 result := '23FEC5BB 94D60B23 30819264 0B0C4533 35D66473 4FE40E72 68674AF9'
 end;
@@ -1323,13 +1333,13 @@ end;
 
 
 
-function TSHA512_256.SelfTest_Source: utf8string;
+function TSHA512_256.SelfTest_Source: string;
 begin
 result := 'abcdefghbcdefghicdefghijdefghijkefghijklfghijklmghijklmnhijkl' +
   'mnoijklmnopjklmnopqklmnopqrlmnopqrsmnopqrstnopqrstu'
 end;
 
-function TSHA512_256.SelfTest_ReferenceHashValue: utf8string;
+function TSHA512_256.SelfTest_ReferenceHashValue: string;
 begin
 result := '3928E184 FB8690F8 40DA3988 121D31BE 65CB9D3E F83EE614 ' +
           '6FEAC861 E19B563A'

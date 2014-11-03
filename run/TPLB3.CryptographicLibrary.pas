@@ -28,14 +28,13 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.CryptographicLibrary;
 interface
 uses Classes, TPLB3.BaseNonVisualComponent, TPLB3.StreamCipher,
-     TPLB3.BlockCipher, contnrs, TPLB3.HashDsc, TPLB3.SimpleBlockCipher
-     {$if compilerversion >= 27.0}
-       , Types
-     {$ifend}
-     ;
+     TPLB3.BlockCipher, TPLB3.HashDsc, TPLB3.SimpleBlockCipher,
+     {$IFDEF GENERICS}Generics.Collections{$ELSE}Contnrs{$ENDIF};
 
 type
 
@@ -92,9 +91,6 @@ ICryptographicLibraryWatcher = interface
   procedure ProgIdsChanged;
   end;
 
-{$IF CompilerVersion >= 23.0}
-[ComponentPlatformsAttribute( pidWin32 or pidWin64)]
-{$IFEND}
 TCryptographicLibrary = class( TTPLb_BaseNonVisualComponent)
   private
     FStreamCiphers: IInterfaceList; // of IStreamCipher
@@ -138,7 +134,7 @@ TCryptographicLibrary = class( TTPLb_BaseNonVisualComponent)
   protected
     FisDestroying: boolean;
     FParentLibrary: TCryptographicLibrary;
-    FChildLibraries: TObjectList; // of children TCryptographicLibrary.
+    FChildLibraries: TObjectList{$IFDEF GENERICS}<TComponent>{$ENDIF}; // of children TCryptographicLibrary.
 
     procedure SetParentLibrary( Value: TCryptographicLibrary);
     procedure Notification(
@@ -336,7 +332,7 @@ if result = '' then
       else
         SizeParam := BCipher.BlockSize;
     if (SizeParam > 0) and
-       (Pos( '%d', result) > 0) then
+       {$IFDEF STRINGHELPER}(result.IndexOf( '%d') <> -1){$ELSE}(Pos( '%d', result) > 0){$ENDIF} then
       // Block Cipher adapted into a stream cipher.
       //  The block size is embedded in the display name.
       result := Format( result, [SizeParam])
@@ -364,7 +360,7 @@ result := '';
 if not assigned( Hash) then exit;
 result := Hash.DisplayName;
 
-if Pos( '%d', result) > 0 then
+if {$IFDEF STRINGHELPER}(result.IndexOf( '%d') <> -1){$ELSE}Pos( '%d', result) > 0{$ENDIF} then
   result := Format( result, [Hash.UpdateSize]);
 
 if afStar in Hash.Features then
@@ -390,7 +386,7 @@ FHashes         := TInterfaceList.Create;
 for j := Low( TCryptoLibStringRef) to High( TCryptoLibStringRef) do
   TCryptLibStrings.Create( j, self);
 FParentLibrary := nil;
-FChildLibraries := TObjectList.Create( False); // of children TCryptographicLibrary.
+FChildLibraries := TObjectList{$IFDEF GENERICS}<TComponent>{$ENDIF}.Create( False); // of children TCryptographicLibrary.
 TCustomStreamCipher.Create( self);
 StockStreamCiphers;
 StockBlockCiphers;
@@ -1069,26 +1065,6 @@ end;
 
 const MaxDepth = 10;
 
-{$HINTS OFF}
-// Why are HINTS OFF for this method?
-// The normal way users are expected to use this library, is that
-//  TP_LockBox_XXX.bpl is compiled and the dcu files are built in some location.
-//  When the developer compiles an application which uses LockBox, it is
-//  assumed that the said dcu location is on the Library Path for the given
-//  platform, but the location of the LockBox source files (Run directory) is NOT.
-// In this normal mode, there are no issues with hints.
-//
-// Some developers may prefer to include the location of the location of the
-//  LockBox source in the Library Path for the platform. This is a valid thing
-//  to do, but it changes the compiler behaviour. If the developer does this
-//  (Source on path), AND this $HINTS OFF directive was not used, AND
-//  Types is not included in the uses clause of this unit, when compiling the
-//  application which uses LockBox, the compiler (XE6 or later) may emit this
-//  hint ...
-//
-// [dcc32 Hint] TPLB3.CryptographicLibrary.pas(1116): H2443 Inline function 'TObjectList.Remove' has not been expanded because unit 'System.Types' is not specified in USES list
-//
-// The hint is not useful, so we suppress it.
 procedure TCryptographicLibrary.SetParentLibrary( Value: TCryptographicLibrary);
 var
   Depth, DepthDown, DepthDown1, DepthDown2, DepthUp: integer;
@@ -1153,7 +1129,6 @@ if assigned( FParentLibrary) then
   end;
 
 end;
-{$HINTS ON}
 
 
 procedure TCryptographicLibrary.Notification(

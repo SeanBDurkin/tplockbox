@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.Signatory;
 interface
 uses Classes, TPLB3.BaseNonVisualComponent, TPLB3.Codec, TPLB3.Asymetric;
@@ -37,9 +39,6 @@ TGenerateKeysPhase = (gkNeutral, gkGenSigningKeys, gkGenCryptoKeys, gkDone);
 TVerifyResult = (vPass, vFail, vUserAbort);
 
 
-{$IF CompilerVersion >= 23.0}
-[ComponentPlatformsAttribute( pidWin32 or pidWin64)]
-{$IFEND}
 TSignatory = class( TTPLb_BaseNonVisualComponent)
   private
     FCodec: TCodec;

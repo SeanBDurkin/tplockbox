@@ -22,6 +22,9 @@
 {* FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER        *}
 {* DEALINGS IN THE SOFTWARE.                                                  *}
 {******************************************************************************}
+
+{$I TPLB3.Common.inc}
+
 unit TPLB3.DCP.twofish_Modified;
 // The original unit name was DCPtwofish .
 //  This unit is not part of the LockBox Project, but is used by it.
@@ -30,7 +33,7 @@ unit TPLB3.DCP.twofish_Modified;
 
 interface
 uses
-  Classes, Sysutils, windows;
+  Classes, Sysutils;
 
 const
   INPUTWHITEN= 0;
@@ -47,10 +50,10 @@ const
 
 type
 
-TSubKeys = array[ 0.. TOTALSUBKEYS - 1] of DWord;
-TSBox    = array[ 0..3, 0..255] of DWord;
-T128     = packed array[ 0..3 ] of DWord;
-T256     = packed array[ 0..7 ] of DWord;
+TSubKeys = array[ 0.. TOTALSUBKEYS - 1] of Cardinal;
+TSBox    = array[ 0..3, 0..255] of Cardinal;
+T128     = packed array[ 0..3 ] of Cardinal;
+T256     = packed array[ 0..7 ] of Cardinal;
 T2048    = packed array[ 0..255 ] of byte;
 Tp8x8    = packed array[ 0..1 ] of T2048;
 
@@ -79,7 +82,7 @@ implementation
 var
   MDS: TSBox;
 
-function LFSR1( x: DWord): DWord;
+function LFSR1( x: Cardinal): Cardinal;
 begin
   if (x and 1)<> 0 then
     Result:= (x shr 1) xor (MDS_GF_FDBK div 2)
@@ -87,7 +90,7 @@ begin
     Result:= (x shr 1);
 end;
 
-function LFSR2(x: DWord): DWord;
+function LFSR2(x: Cardinal): Cardinal;
 begin
   if (x and 2)<> 0 then
     if (x and 1)<> 0 then
@@ -100,18 +103,18 @@ begin
     else
       Result:= (x shr 2);
 end;
-function Mul_X(x: DWord): DWord;
+function Mul_X(x: Cardinal): Cardinal;
 begin
   Result:= x xor LFSR2(x);
 end;
-function Mul_Y(x: DWord): DWord;
+function Mul_Y(x: Cardinal): Cardinal;
 begin
   Result:= x xor LFSR1(x) xor LFSR2(x);
 end;
 
-function RS_MDS_Encode(lK0, lK1: DWord): DWord;
+function RS_MDS_Encode(lK0, lK1: Cardinal): Cardinal;
 var
-  lR, nJ, lG2, lG3: DWord;
+  lR, nJ, lG2, lG3: Cardinal;
   bB: byte;
 begin
   lR:= lK1;
@@ -213,9 +216,9 @@ const
     $d7, $61, $1e, $b4, $50, $04, $f6, $c2,
     $16, $25, $86, $56, $55, $09, $be, $91));
 
-function f32( x: DWord; const K32: T128; Len: DWord): DWord;
+function f32( x: Cardinal; const K32: T128; Len: Cardinal): Cardinal;
 var
-  t0, t1, t2, t3: DWord;
+  t0, t1, t2, t3: Cardinal;
 begin
   t0:= x and $FF;
   t1:= (x shr 8) and $FF;
@@ -244,8 +247,8 @@ end;
 
 procedure Xor256( var Dst: T2048; const Src: T2048; v: byte);
 var
-  i, j: DWord;
-  PDst, PSrc: PDWord;
+  i, j: Cardinal;
+  PDst, PSrc: PCardinal;
 begin
 j := v * $01010101;
 PDst := @Dst;
@@ -266,7 +269,7 @@ const
 var
   key32: T256;
   k32e, k32o, sboxkeys: T128;
-  k64Cnt, i, j, A, B, q: DWord;
+  k64Cnt, i, j, A, B, q: Cardinal;
   L0, L1: T2048;
 begin
   FillChar(Key32,Sizeof(Key32),0);
@@ -464,7 +467,7 @@ procedure DCP_twofish_EncryptECB(
   const InData: T128; var OutData: T128);
 var
   i: longword;
-  t0, t1: DWord;
+  t0, t1: Cardinal;
   X: T128;
   k: integer;
 begin
@@ -504,7 +507,7 @@ procedure DCP_twofish_DecryptECB(
   const InData: T128; var OutData: T128);
 var
   i, k: integer;
-  t0, t1: DWord;
+  t0, t1: Cardinal;
   X: T128;
 begin
   X[2] := InData[0] xor SubKeys[OUTPUTWHITEN];
@@ -540,7 +543,7 @@ end;
 
 procedure DCP_towfish_Precomp;
 var
-  m1, mx, my: array[0..1] of DWord;
+  m1, mx, my: array[0..1] of Cardinal;
   nI: longword;
 begin
   for nI:= 0 to 255 do

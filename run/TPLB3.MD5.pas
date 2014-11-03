@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.MD5;
 interface
 uses classes, TPLB3.HashDsc, TPLB3.StreamCipher;
@@ -74,8 +76,8 @@ TMD5_Hasher = class( TInterfacedObject, IHasher)
     procedure  Update( Source{in}: TMemoryStream);
     procedure  End_Hash( PartBlock{in}: TMemoryStream; Digest: TStream);
     procedure  Burn;
-    function   SelfTest_Source: utf8string;
-    function   SelfTest_ReferenceHashValue: utf8string;
+    function   SelfTest_Source: string;
+    function   SelfTest_ReferenceHashValue: string;
   end;
 
 
@@ -215,12 +217,12 @@ lwDigest := 0
 end;
 
 
-function TMD5_Hasher.SelfTest_ReferenceHashValue: utf8string;
+function TMD5_Hasher.SelfTest_ReferenceHashValue: string;
 begin
 result := 'f96b697d 7cb7938d 525a2f31 aaf161d0'
 end;
 
-function TMD5_Hasher.SelfTest_Source: utf8string;
+function TMD5_Hasher.SelfTest_Source: string;
 begin
 result := 'message digest'
 end;

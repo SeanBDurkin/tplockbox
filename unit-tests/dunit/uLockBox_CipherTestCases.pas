@@ -168,11 +168,7 @@ implementation
 uses SysUtils, TPLB3.HashDsc, TPLB3.BinaryUtils, TPLB3.StreamUtils,
      TPLB3.ECB, TPLB3.BlockCipher, TPLB3.HugeCardinalUtils,
      TPLB3.IntegerUtils, TPLB3.DES, TPLB3.Constants,
-     TPLB3.DCP.twofish_Modified
-{$IF compilerversion <= 17}
-, uTPLb_D7Compatibility
-{$IFEND}
-  ;
+     TPLB3.DCP.twofish_Modified, TPLB3.Compatibility;
 
 
 { TTestCaseFirst }

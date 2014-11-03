@@ -28,6 +28,7 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
 
 unit TPLB3.BlockCipher;
 interface
@@ -53,13 +54,13 @@ IBlockCipher = interface( ICryptoGraphicAlgorithm)
 
     function  MakeBlockCodec( Key: TSymetricKey): IBlockCodec;
 
-    function  SelfTest_Key: utf8string; // Hex string; may be oriented into
+	function  SelfTest_Key: string; // Hex string; may be oriented into
       // u32 groups. Input to GenerateKey();
 
-    function  SelfTest_Plaintext: utf8string; // Hex string;
+	function  SelfTest_Plaintext: string; // Hex string;
       // may be oriented into u32 groups. Input to Encrypt_Block();
 
-    function  SelfTest_Ciphertext: utf8string; // Hex string;
+    function  SelfTest_Ciphertext: string; // Hex string;
       // may be oriented into u32 groups. Reference for Encrypt_Block() output;
     end;
 

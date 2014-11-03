@@ -28,6 +28,7 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
 
 unit TPLB3.BaseNonVisualComponent;
 interface

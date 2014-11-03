@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.StreamToBlock;
 interface
 uses TPLB3.StreamCipher, TPLB3.BlockCipher, Classes, TPLB3.Decorators;
@@ -386,6 +388,7 @@ TNoncibleDecryptor = class( TEncryptorDecryptor, IStreamDecryptor)
     FIVSeedLen: integer;
     FSaltLen: integer;
     FisShortMessage: boolean;
+    FOnSetIV: TSetMemStreamProc;
 
     procedure Decrypt( const Ciphertext: TStream);
     procedure End_Decrypt;
@@ -397,7 +400,8 @@ TNoncibleDecryptor = class( TEncryptorDecryptor, IStreamDecryptor)
     constructor Start_Decrypt(
       Key1: TSymetricKey; PlainText1: TStream;
       const BlockCipher1: IBlockCipher;
-      const Chaining1: IBlockChainingModel);
+      const Chaining1: IBlockChainingModel;
+      OnSetIV1: TSetMemStreamProc);
 
     destructor Destroy; override;
   end;
@@ -582,7 +586,7 @@ if optOpenSSL_CompatibilityMode in FAdvancedOptions then
       Key, PlainText, FBlockCipher, FChaining)
   else
     result := TNoncibleDecryptor.Start_Decrypt(
-      Key, PlainText, FBlockCipher, FChaining)
+      Key, PlainText, FBlockCipher, FChaining, FOnSetIV)
 end;
 
 
@@ -1055,7 +1059,8 @@ end;
 constructor TNoncibleDecryptor.Start_Decrypt(
   Key1: TSymetricKey;
   PlainText1: TStream; const BlockCipher1: IBlockCipher;
-  const Chaining1: IBlockChainingModel);
+  const Chaining1: IBlockChainingModel;
+  OnSetIV1: TSetMemStreamProc);
 begin
 inherited Start_EncDec( Key1, Plaintext1, BlockCipher1, Chaining1, False);
 FKey := Key1;
@@ -1067,6 +1072,7 @@ F2ndBuffer       := TMemoryStream.Create;
 F2ndBuffer.Size  := FBlockLen;
 Fis2ndBufferFull := False;
 
+FOnSetIV := OnSetIV1;
 FIV.Size := 0;
 
 FIVSeedLen := Min( FBlockLen, 8);
@@ -1112,6 +1118,8 @@ while (X > 0) or (FLenBuffer = FBlockLen) do
       FIV.Size := FBlockLen;
       FillChar( MemStrmOffset( FIV, OldSize)^, FBlockLen - OldSize, 0)
       end;
+    if Assigned( FOnSetIV) then
+      FOnSetIV( FIV);
     continue
     end;
 

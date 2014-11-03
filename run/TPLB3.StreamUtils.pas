@@ -28,18 +28,20 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.StreamUtils;
 interface
-uses Classes;
+uses Classes, SysUtils;
 
 const
-  Base64Chars: utf8string =
+  Base64Chars: string =
     'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
   // You can implement non-standard variants to base64 transformation,
   //  by passing a string like the above one into the base64 transform functions
   //  below.
 type
-  TInverseBaseTransform = array[ ansichar] of byte;
+  TInverseBaseTransform = array[ Byte] of byte;
 
 TDesalinationWriteStream = class( TStream)
   private
@@ -73,15 +75,20 @@ procedure XOR_Streams3( Dest, SrceA, SrceB: TMemoryStream);  // Dest := SrceB xo
 
 function  CompareMemoryStreams( S1, S2: TMemoryStream): boolean;
 
-function  Stream_to_Base64( Source: TStream; const Transform: utf8string = ''): utf8string;
+function  Stream_to_Base64( Source: TStream; const Transform: string = ''): string;
 
-procedure Base64_to_stream( const Base64: utf8string; Destin: TStream);
+procedure Base64_to_stream( const Base64: string; Destin: TStream);
 
-procedure CustomBase64_to_stream( const Base64: utf8string; Destin: TStream;
+procedure CustomBase64_to_stream( const Base64: string; Destin: TStream;
   const InverseTransform: TInverseBaseTransform);
 
-function  Stream_to_utf8string( Source: TStream): utf8string;
-procedure utf8string_to_stream( const Value: utf8string; Destin: TStream);
+function  Stream_to_string( Source: TStream{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF}): string; overload;
+function  Stream_to_string( Source: TStream{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF}; Count: Longint): string; overload;
+procedure String_to_stream( const Value: string; Destin: TStream{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF}); overload;
+{$IFDEF UNICODE}
+function  Stream_to_utf8string( Source: TStream): string; deprecated;
+procedure utf8string_to_stream( const Value: string; Destin: TStream); deprecated;
+{$ENDIF}
 
 
 function CompareFiles( const FN1, FN2: string;
@@ -102,7 +109,7 @@ implementation
 
 
 
-uses Math, SysUtils, TPLB3.Random, TPLB3.IntegerUtils;
+uses Math, TPLB3.Random, TPLB3.IntegerUtils, TPLB3.Compatibility;
 
 
 
@@ -267,19 +274,19 @@ end;
 
 
 
-function  Stream_to_Base64( Source: TStream; const Transform: utf8string = ''): utf8string;
+function  Stream_to_Base64( Source: TStream; const Transform: string = ''): string;
 var
   ThreeBytes: packed array[ 0..2 ] of byte;
   BytesRead: integer;
   P, j, i: integer;
-  Base64Transform: utf8string;
+  Base64Transform: string;
 begin
 Base64Transform := Transform;
 if Base64Transform = '' then
    Base64Transform := Base64Chars;
 SetLength( result, (Source.Size + 2) div 3 * 4);
 Source.Position := 0;
-P := 1;
+P := {$IFDEF STRINGHELPER}Low( Result){$ELSE}1{$ENDIF};
 repeat
   BytesRead := Source.Read( ThreeBytes, 3);
   if BytesRead = 0 then break;
@@ -287,7 +294,11 @@ repeat
     ThreeBytes[j] := 0;
   for j := 0 to BytesRead do
     begin
+    {$IFDEF STRINGHELPER}
+    result[ P ] := Base64Transform.Chars[ ThreeBytes[0] shr 2];
+    {$ELSE}
     result[ P ] := Base64Transform[ ( ThreeBytes[0] shr 2) + 1];
+    {$ENDIF}
     Inc( P);
     for i := 0 to 1 do
       ThreeBytes[i] := (ThreeBytes[i] shl 6) + (ThreeBytes[i+1] shr 2);
@@ -303,17 +314,17 @@ if BytesRead > 0 then
 end;
 
 
-procedure Base64_to_stream( const Base64: utf8string; Destin: TStream);
+procedure Base64_to_stream( const Base64: string; Destin: TStream);
 begin
 CustomBase64_to_stream( Base64, Destin, Inverse_Base64Chars)
 end;
 
 
-procedure CustomBase64_to_stream( const Base64: utf8string; Destin: TStream;
+procedure CustomBase64_to_stream( const Base64: string; Destin: TStream;
   const InverseTransform: TInverseBaseTransform);
 var
   P, j, i: integer;
-  Ch: AnsiChar;
+  Ch: Char;
   Bits6: byte;
   ThreeBytes: packed array[ 0..2 ] of byte;
   ByteIdx, BitIdx: integer;
@@ -328,9 +339,13 @@ for P := 0 to (Length( Base64) div 4) - 1 do
   BitIdx  := 0;
   for j := 1 to 4 do
     begin
+    {$IFDEF STRINGHELPER}
+    Ch := Base64.Chars[ P * 4 + j - 1];
+    {$ELSE}
     Ch := Base64[ P * 4 + j];
+    {$ENDIF}
     if Ch = '=' then break;
-    Bits6 := InverseTransform[ Ch];
+    Bits6 := InverseTransform[ Ord( Ch)];
 //    ShrN := BitIdx - 2;
     if BitIdx > 2 then
         Addend := Bits6 shr (BitIdx - 2)
@@ -356,33 +371,80 @@ end;
 procedure Invert_Base64Chars;
 var
   j: integer;
-  ch: ansichar;
+  ch: Byte;
 begin
 for ch := Low( Inverse_Base64Chars) to High( Inverse_Base64Chars) do
   Inverse_Base64Chars[ ch] := 255;
+{$IFDEF STRINGHELPER}
+for j := Low( Base64Chars) to High( Base64Chars) do
+{$ELSE}
 for j := 1 to Length( Base64Chars) do
+{$ENDIF}
   begin
-  ch := Base64Chars[j];
-  Inverse_Base64Chars[ ch] := j - 1
+  ch := Ord( Base64Chars{$IFDEF STRINGHELPER}.Chars{$ENDIF}[ j]);
+  Inverse_Base64Chars[ ch] := j
   end
 end;
 
 
-function  Stream_to_utf8string( Source: TStream): utf8string;
+function  Stream_to_string( Source: TStream; {$IFDEF UNICODE}Encoding: TEncoding;{$ENDIF} Count: Longint): string;
+{$IFDEF UNICODE}
+var
+  SourceBytes: TBytes;
+{$ENDIF}
 begin
-SetLength( result, Source.Size);
-if result <> '' then
-  Source.ReadBuffer( result[1], Length( result) * SizeOf( AnsiChar))
+if Count <> 0 then
+  begin
+  {$IFDEF UNICODE}
+  SetLength( SourceBytes, Count);
+  Source.ReadBuffer( SourceBytes[0], Count);
+  result := Encoding.GetString( SourceBytes);
+  {$ELSE}
+  SetLength( Result, Count);
+  Source.ReadBuffer( result[1], Count);
+  {$ENDIF}
+  end
 end;
 
 
+function  Stream_to_string( Source: TStream{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF}): string;
+begin
+  Result := Stream_to_string( Source{$IFDEF UNICODE}, Encoding{$ENDIF}, Source.Size);
+end;
 
-procedure utf8string_to_stream( const Value: utf8string; Destin: TStream);
+
+{$IFDEF UNICODE}
+function  Stream_to_utf8string( Source: TStream): string;
+begin
+  Result := Stream_to_string( Source, TEncoding.UTF8);
+end;
+{$ENDIF}
+
+
+procedure String_to_stream( const Value: string; Destin: TStream{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF});
+{$IFDEF UNICODE}
+var
+  ValueBytes: TBytes;
+{$ENDIF}
 begin
 if Value <> '' then
-  Destin.WriteBuffer( Value[1], Length( Value) * SizeOf( AnsiChar))
+  begin
+  {$IFDEF UNICODE}
+  ValueBytes := Encoding.GetBytes( Value);
+  Destin.WriteBuffer( ValueBytes[0], Length( ValueBytes))
+  {$ELSE}
+  Destin.WriteBuffer( Value[1], Length( Value))
+  {$ENDIF}
+  end
 end;
 
+
+{$IFDEF UNICODE}
+procedure utf8string_to_stream( const Value: string; Destin: TStream);
+begin
+  String_to_stream( Value, Destin, TEncoding.UTF8);
+end;
+{$ENDIF}
 
 
 { TDesalinationWriteStream }
@@ -459,11 +521,7 @@ const
   BufferSizeInBytes = 1024;
 var
   Stream1, Stream2: TStream;
-{$IF CompilerVersion >= 21}
-  Buffer1, Buffer2: rawbytestring;
-{$ELSE}
-  Buffer1, Buffer2: utf8string;
-{$IFEND}
+  Buffer1, Buffer2: TBytes;
   Count1, Count2, L: integer;
 begin
 Stream1 := TFileStream.Create( FN1, fmOpenRead);
@@ -475,10 +533,10 @@ try
   SetLength( Buffer2, L);
   if result then
     repeat
-      Count1 := Stream1.Read( Buffer1[1], L);
-      Count2 := Stream2.Read( Buffer2[1], L);
+      Count1 := Stream1.Read( Buffer1[0], L);
+      Count2 := Stream2.Read( Buffer2[0], L);
       result := (Count1 = Count2) and CompareMem(
-        PAnsiChar( Buffer1), PAnsiChar( Buffer2), Count1);
+        Buffer1, Buffer2, Count1);
       if assigned( Breathe) then
         Breathe( BreathingSender)
         // Breathe should do something like Application.ProcessMessages();

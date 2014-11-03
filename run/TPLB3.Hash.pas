@@ -28,11 +28,13 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.Hash;
 interface
-uses Classes, TPLB3.StreamCipher,
+uses Classes, SysUtils, TPLB3.StreamCipher,
      TPLB3.BaseNonVisualComponent, TPLB3.CryptographicLibrary,
-     TPLB3.HashDsc;
+     TPLB3.HashDsc, TPLB3.Compatibility;
 
 type
 
@@ -55,8 +57,12 @@ IHash = interface
 
     procedure HashStream( Plaintext: TStream);
     procedure HashFile  ( const PlaintextFileName: string);
-    procedure HashString( const Plaintext: string);
-    procedure Hashutf8string( const Plaintext: utf8string);
+    procedure HashBytes( const Plaintext: TBytes);
+    procedure HashString( const Plaintext: string); overload;
+{$IFDEF UNICODE}
+    procedure HashString( const Plaintext: string; Encoding: TEncoding); overload;
+    procedure Hashutf8string( const Plaintext: string); deprecated;
+{$ENDIF}
 
     function  isUserAborted: boolean;
     procedure WriteHashOutputToStream( Dest: TStream);
@@ -91,8 +97,12 @@ TSimpleHash = class( TInterfacedPersistent, IHash, IEventOrigin, IHash_TestAcces
     procedure Burn;
     procedure HashStream( Plaintext: TStream);
     procedure HashFile  ( const PlaintextFileName: string);
-    procedure HashString( const Plaintext: string);
-    procedure Hashutf8string( const Plaintext: utf8string);
+    procedure HashBytes( const Plaintext: TBytes);
+    procedure HashString( const Plaintext: string); overload;
+{$IFDEF UNICODE}
+    procedure HashString( const Plaintext: string; Encoding: TEncoding); overload;
+    procedure Hashutf8string( const Plaintext: string); deprecated;
+{$ENDIF}
     function  isUserAborted: boolean;
     procedure SetEventSender( Sender: TObject);
     procedure WriteHashOutputToStream( Dest: TStream);
@@ -164,8 +174,12 @@ THash = class( TTPLb_BaseNonVisualComponent, ICryptographicLibraryWatcher, IHash
 
     procedure HashStream( Plaintext: TStream);
     procedure HashFile  ( const PlaintextFileName: string);
-    procedure HashString( const Plaintext: string);
-    procedure Hashutf8string( const Plaintext: utf8string);
+    procedure HashBytes( const Plaintext: TBytes);
+    procedure HashString( const Plaintext: string); overload;
+{$IFDEF UNICODE}
+    procedure HashString( const Plaintext: string; Encoding: TEncoding); overload;
+    procedure Hashutf8string( const Plaintext: string); deprecated;
+{$ENDIF}
 
     function  isUserAborted: boolean;
 
@@ -188,7 +202,7 @@ implementation
 
 
 
-uses SysUtils, TPLB3.StreamUtils, TPLB3.BinaryUtils, Math;
+uses TPLB3.StreamUtils, TPLB3.BinaryUtils, Math;
 
 
 
@@ -302,15 +316,12 @@ result := FOnProgress
 end;
 
 
-procedure TSimpleHash.Hashutf8string( const Plaintext: utf8string);
+{$IFDEF UNICODE}
+procedure TSimpleHash.Hashutf8string( const Plaintext: string);
 begin
-Begin_Hash;
-try
-if Plaintext <> '' then
-  UpdateMemory( Plaintext[1], Length( Plaintext) * SizeOf( AnsiChar))
-finally
-End_Hash
-end end;
+  HashString( Plaintext, TEncoding.UTF8);
+end;
+{$ENDIF}
 
 
 procedure TSimpleHash.HashFile( const PlaintextFileName: string);
@@ -348,12 +359,44 @@ end end;
 
 
 
+{$IFDEF UNICODE}
 procedure TSimpleHash.HashString( const Plaintext: string);
+begin
+  HashString( Plaintext, TEncoding.UTF8);
+end;
+{$ENDIF}
+
+
+
+procedure TSimpleHash.HashString( const Plaintext: string{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF});
+{$IFDEF UNICODE}
+var
+  PlaintextBytes: TBytes;
+{$ENDIF}
+begin
+if Plaintext <> '' then
+  begin
+  {$IFDEF UNICODE}
+  PlaintextBytes := Encoding.GetBytes( Plaintext);
+  HashBytes( PlaintextBytes)
+  {$ELSE}
+  UpdateMemory( Plaintext[1], Length( Plaintext) * SizeOf( Char))
+  {$ENDIF}
+  end;
+end;
+
+
+
+
+procedure TSimpleHash.HashBytes( const Plaintext: TBytes);
+var
+  PlaintextLength: Integer;
 begin
 Begin_Hash;
 try
-if Plaintext <> '' then
-  UpdateMemory( Plaintext[1], Length( Plaintext) * SizeOf( Char))
+PlaintextLength := Length( Plaintext);
+if PlaintextLength <> 0 then
+  UpdateMemory( Plaintext[0], PlaintextLength);
 finally
 End_Hash
 end end;
@@ -581,11 +624,12 @@ result := FHash.OnProgress
 end;
 
 
-procedure THash.Hashutf8string( const Plaintext: utf8string);
+{$IFDEF UNICODE}
+procedure THash.Hashutf8string( const Plaintext: string);
 begin
-InterfacesAreCached := True;
-FHash.Hashutf8string( Plaintext)
+  HashString( Plaintext, TEncoding.UTF8);
 end;
+{$ENDIF}
 
 
 procedure THash.HashFile( const PlaintextFileName: string);
@@ -604,10 +648,27 @@ end;
 
 
 
+{$IFDEF UNICODE}
 procedure THash.HashString( const Plaintext: string);
 begin
+  HashString( Plaintext, TEncoding.UTF8);
+end;
+{$ENDIF}
+
+
+
+procedure THash.HashString( const Plaintext: string{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF});
+begin
 InterfacesAreCached := True;
-FHash.HashString( Plaintext)
+FHash.HashString( Plaintext{$IFDEF UNICODE}, Encoding{$ENDIF})
+end;
+
+
+
+procedure THash.HashBytes( const Plaintext: TBytes);
+begin
+InterfacesAreCached := True;
+FHash.HashBytes( Plaintext)
 end;
 
 

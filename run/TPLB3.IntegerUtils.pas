@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.IntegerUtils;
 interface
 
@@ -62,7 +64,7 @@ implementation
 
 
 
-uses SysUtils;
+uses SysUtils, TPLB3.Compatibility;
 
 
 {.$define PUREPASCAL}
@@ -80,25 +82,17 @@ uses SysUtils;
 {$undef IntegerUtils_ASM32}
 {$undef IntegerUtils_ASM64}
 
-{$IFDEF WIN32}
-  {$IFDEF PUREPASCAL}
-    {$define IntegerUtils_Pascal}
+{$IF Defined(PUREPASCAL) or not Defined(ASSEMBLER)}
+  {$DEFINE IntegerUtils_Pascal}
+{$ELSE}
+  {$IF Defined(CPUX64) and not Defined(IntegerUtils_ASM64_NotYetImplemented)}
+    {$DEFINE IntegerUtils_ASM64}
+  {$ELSEIF Defined(CPUX86)}
+    {$DEFINE IntegerUtils_ASM32}
   {$ELSE}
-    {$define IntegerUtils_ASM32}
-  {$ENDIF}
-{$ENDIF}
-
-{$IFDEF WIN64}
-  {$IFDEF PUREPASCAL}
-    {$define IntegerUtils_Pascal}
-  {$ELSE}
-    {$IFDEF IntegerUtils_ASM64_NotYetImplemented}
-      {$define IntegerUtils_Pascal}
-    {$ELSE}
-      {$define IntegerUtils_ASM64}
-    {$ENDIF}
-  {$ENDIF}
-{$ENDIF}
+    {$DEFINE IntegerUtils_Pascal}
+  {$IFEND}
+{$IFEND}
 
 {$IFDEF IntegerUtils_ASM32}
 function Add_uint32_WithCarry( x, y: uint32; var Carry: Boolean): uint32;

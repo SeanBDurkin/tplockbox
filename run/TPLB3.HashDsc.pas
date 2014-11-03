@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.HashDsc;
 interface
 uses Classes, TPLB3.StreamCipher;
@@ -47,8 +49,8 @@ IHasher = interface
     // End_Hash simply writes DigestSize/8 bytes to the Digest stream
     //  from its current position.
   procedure  Burn;
-  function   SelfTest_Source: utf8string; // Bigendien hex string, oriented into u32 groups.;
-  function   SelfTest_ReferenceHashValue: utf8string; // as above
+  function   SelfTest_Source: string; // Bigendien hex string, oriented into u32 groups.;
+  function   SelfTest_ReferenceHashValue: string; // as above
   end;
 
 IHashDsc = interface( ICryptoGraphicAlgorithm)

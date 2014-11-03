@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.Random;
 interface
 uses Classes;
@@ -69,7 +71,7 @@ implementation
 
 
 
-uses Math, Windows, SysUtils, TPLB3.IntegerUtils;
+uses Math, {$IFDEF MSWINDOWS}Windows,{$ENDIF} SysUtils, TPLB3.IntegerUtils, TPLB3.Compatibility;
 var
   Inst: TRandomStream = nil;
 
@@ -79,9 +81,18 @@ var
 
 
 function TimeStampClock: int64;
+{$IFDEF ASSEMBLER}
 asm
   RDTSC
 end;
+{$ELSE}
+var
+  SystemTimes: TThread.TSystemTimes;
+begin
+  TThread.GetSystemTimes( SystemTimes);
+  result := SystemTimes.KernelTime
+end;
+{$ENDIF}
 
 
 procedure InitUnit_Random;
@@ -95,6 +106,7 @@ Inst.Free
 end;
 
 
+{$IFDEF MSWINDOWS}
 function CryptAcquireContext(
   var phProv: THandle;
   pszContainer, pszProvider: PChar;
@@ -121,6 +133,7 @@ const
   PROV_RSA_FULL = 1;
   CRYPT_SILENT = 64;
   Provider = 'Microsoft Base Cryptographic Provider v1.0';
+{$ENDIF}
 
 
 
@@ -172,12 +185,15 @@ end;
 
 
 procedure TRandomStream.Randomize;
+{$IFDEF MSWINDOWS}
 var
   hProv: THandle;
   dwProvType, dwFlags: DWORD;
   Provider1: string;
   hasOpenHandle: boolean;
+{$ENDIF}
 begin
+{$IFDEF MSWINDOWS}
 Provider1  := Provider;
 dwProvType := PROV_RSA_FULL;
 dwFlags    := CRYPT_SILENT;
@@ -189,6 +205,9 @@ finally
   if hasOpenHandle then
     CryptReleaseContext( hProv, 0)
   end;
+{$ELSE}
+  FValue := TimeStampClock;
+{$ENDIF}
 Crunch
 end;
 

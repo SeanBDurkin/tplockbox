@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.TDES;
 interface
 uses Classes, TPLB3.BlockCipher, TPLB3.StreamCipher;
@@ -48,9 +50,9 @@ T3DES = class( TInterfacedObject,
     function  KeySize: integer;    virtual;
     function  SeedByteSize: integer; virtual; // Size that the input of the GenerateKey must be.
     function  MakeBlockCodec( Key: TSymetricKey): IBlockCodec;  virtual;
-    function  SelfTest_Key: utf8string;                         virtual;
-    function  SelfTest_Plaintext: utf8string;                   virtual;
-    function  SelfTest_Ciphertext: utf8string;                  virtual;
+    function  SelfTest_Key: string;                             virtual;
+    function  SelfTest_Plaintext: string;                       virtual;
+    function  SelfTest_Ciphertext: string;                      virtual;
 
   public
     constructor Create;                                         virtual;
@@ -66,9 +68,9 @@ T3DES_KO1 = class( T3DES)
     function  KeySize: integer;                                   override;
     function  SeedByteSize: integer;                            override;
     function  MakeBlockCodec( Key: TSymetricKey): IBlockCodec;  override;
-    function  SelfTest_Key: utf8string;                         override;
-    function  SelfTest_Plaintext: utf8string;                   override;
-    function  SelfTest_Ciphertext: utf8string;                  override;
+    function  SelfTest_Key: string;                             override;
+    function  SelfTest_Plaintext: string;                       override;
+    function  SelfTest_Ciphertext: string;                      override;
   end;
 
 
@@ -201,17 +203,17 @@ end;
 //<------------- key -------------> <-- plaintext -> <- ciphertext ->
 //E62CABB93D1F3BDC 524FDF91A279C297 DD16B3D004069AB3 8ADDBD2290E565CE
 
-function T3DES.SelfTest_Ciphertext: utf8string;
+function T3DES.SelfTest_Ciphertext: string;
 begin
 result := '8ADDBD2290E565CE'
 end;
 
-function T3DES.SelfTest_Key: utf8string;
+function T3DES.SelfTest_Key: string;
 begin
 result := 'E62CABB93D1F3BDC 524FDF91A279C297'
 end;
 
-function T3DES.SelfTest_Plaintext: utf8string;
+function T3DES.SelfTest_Plaintext: string;
 begin
 result := 'DD16B3D004069AB3'
 end;
@@ -354,17 +356,17 @@ end;
 
 // This test vector from section B1 of
 //  http://csrc.nist.gov/publications/drafts/800-67-rev1/SP-800-67-rev1-2_July-2011.pdf
-function T3DES_KO1.SelfTest_Key: utf8string;
+function T3DES_KO1.SelfTest_Key: string;
 begin
 result := '0123456789ABCDEF 23456789ABCDEF01 456789ABCDEF0123'
 end;
 
-function T3DES_KO1.SelfTest_Plaintext: utf8string;
+function T3DES_KO1.SelfTest_Plaintext: string;
 begin
 result := '5468652071756663'
 end;
 
-function T3DES_KO1.SelfTest_Ciphertext: utf8string;
+function T3DES_KO1.SelfTest_Ciphertext: string;
 begin
 result := 'A826FD8CE53B855F'
 end;

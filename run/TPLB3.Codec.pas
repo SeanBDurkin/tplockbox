@@ -28,9 +28,11 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.Codec;
 interface
-uses Classes, TPLB3.StreamCipher, TPLB3.BlockCipher, TPLB3.Asymetric,
+uses Classes, SysUtils, TPLB3.StreamCipher, TPLB3.BlockCipher, TPLB3.Asymetric,
      TPLB3.BaseNonVisualComponent, TPLB3.CryptographicLibrary, TPLB3.CodecIntf,
      TPLB3.HashDsc, TPLB3.Hash, TPLB3.StreamUtils;
 
@@ -95,9 +97,10 @@ TSimpleCodec = class( TInterfacedPersistent, ICodec, IBlockCipherSelector,
     constructor Create;
     destructor  Destroy; override;
 
-    procedure Init( const Key: string);
+    procedure Init( const Key: string); overload;
 {$IFDEF UNICODE}
-    procedure InitA( const Key: utf8string);
+    procedure Init( const Key: string; Encoding: TEncoding); overload;
+    procedure InitA( const Key: string);
 {$ENDIF}
     procedure SaveKeyToStream( Store: TStream);
     procedure InitFromStream( Store: TStream);
@@ -136,14 +139,19 @@ TSimpleCodec = class( TInterfacedPersistent, ICodec, IBlockCipherSelector,
     procedure EncryptFile( const Plaintext_FileName, CipherText_FileName: string);
     procedure DecryptFile( const Plaintext_FileName, CipherText_FileName: string);
 
-    procedure EncryptString( const Plaintext: string; var CipherText_Base64: utf8string);
-    procedure DecryptString( var Plaintext: string; const CipherText_Base64: utf8string);
+    procedure EncryptString( const Plaintext: string; var CipherText_Base64: string); overload;
+    procedure DecryptString( var Plaintext: string; const CipherText_Base64: string); overload;
 
-    procedure EncryptAnsistring( const Plaintext: Ansistring; var CipherText_Base64: utf8string);
-    procedure DecryptAnsistring( var Plaintext: Ansistring; const CipherText_Base64: utf8string);
+{$IFDEF UNICODE}
+    procedure EncryptString( const Plaintext: string; var CipherText_Base64: string; Encoding: TEncoding); overload;
+    procedure DecryptString( var Plaintext: string; const CipherText_Base64: string; Encoding: TEncoding); overload;
 
-    procedure EncryptUtf8string( const Plaintext: utf8string; var CipherText_Base64: utf8string);
-    procedure DecryptUtf8string( var Plaintext: utf8string; const CipherText_Base64: utf8string);
+    procedure EncryptAnsistring( const Plaintext: string; var CipherText_Base64: string); deprecated;
+    procedure DecryptAnsistring( var Plaintext: string; const CipherText_Base64: string); deprecated;
+
+    procedure EncryptUtf8string( const Plaintext: string; var CipherText_Base64: string); deprecated;
+    procedure DecryptUtf8string( var Plaintext: string; const CipherText_Base64: string); deprecated;
+{$ENDIF}
 
     function  GetAborted: boolean;
     procedure SetAborted( Value: boolean);
@@ -169,9 +177,6 @@ ICodec_TestAccess = interface
   end;
 
 
-{$IF CompilerVersion >= 23.0}
-[ComponentPlatformsAttribute( pidWin32 or pidWin64)]
-{$IFEND}
 TCodec = class( TTPLb_BaseNonVisualComponent, ICryptographicLibraryWatcher,
                  ICodec_TestAccess)
 {$IF CompilerVersion >= 17.0}
@@ -181,7 +186,7 @@ TCodec = class( TTPLb_BaseNonVisualComponent, ICryptographicLibraryWatcher,
 {$IFEND}
     FPassword: string;
 {$IFDEF UNICODE}
-    FUTF8Password: utf8string;
+    FUTF8Password: string;
 {$ENDIF}
 
   private
@@ -216,7 +221,7 @@ TCodec = class( TTPLb_BaseNonVisualComponent, ICryptographicLibraryWatcher,
     function  GetCodecIntf: ICodec;
     procedure SetPassword( const NewPassword: string);
 {$IFDEF UNICODE}
-    procedure SetUTF8Password( const NewPassword: utf8string);
+    procedure SetUTF8Password( const NewPassword: string);
 {$ENDIF}
     procedure GenerateAsymetricKeyPairProgress_Event(
        Sender: TObject; CountPrimalityTests: integer;
@@ -279,14 +284,19 @@ TCodec = class( TTPLb_BaseNonVisualComponent, ICryptographicLibraryWatcher,
     procedure EncryptFile( const Plaintext_FileName, CipherText_FileName: string);
     procedure DecryptFile( const Plaintext_FileName, CipherText_FileName: string);
 
-    procedure EncryptString( const Plaintext: string; var CipherText_Base64: utf8string);
-    procedure DecryptString( var Plaintext: string; const CipherText_Base64: utf8string);
+    procedure EncryptString( const Plaintext: string; var CipherText_Base64: string); overload;
+    procedure DecryptString( var Plaintext: string; const CipherText_Base64: string); overload;
 
-    procedure EncryptAnsistring( const Plaintext: Ansistring; var CipherText_Base64: utf8string);
-    procedure DecryptAnsistring( var Plaintext: Ansistring; const CipherText_Base64: utf8string);
+{$IFDEF UNICODE}
+    procedure EncryptString( const Plaintext: string; var CipherText_Base64: string; Encoding: TEncoding); overload;
+    procedure DecryptString( var Plaintext: string; const CipherText_Base64: string; Encoding: TEncoding); overload;
 
-    procedure EncryptUtf8string( const Plaintext: utf8string; var CipherText_Base64: utf8string);
-    procedure DecryptUtf8string( var Plaintext: utf8string; const CipherText_Base64: utf8string);
+    procedure EncryptAnsistring( const Plaintext: string; var CipherText_Base64: string); deprecated;
+    procedure DecryptAnsistring( var Plaintext: string; const CipherText_Base64: string); deprecated;
+
+    procedure EncryptUtf8string( const Plaintext: string; var CipherText_Base64: string); deprecated;
+    procedure DecryptUtf8string( var Plaintext: string; const CipherText_Base64: string); deprecated;
+{$ENDIF}
 
     function  Speed: integer; // In KiB per second. Set to -1 for indeterminant.
 
@@ -296,7 +306,7 @@ TCodec = class( TTPLb_BaseNonVisualComponent, ICryptographicLibraryWatcher,
     property  ChainModeId: string               read FChainId         write SetChainId;
     property  Password: string                  read FPassword        write SetPassword;
 {$IFDEF UNICODE}
-    property  UTF8Password: utf8string          read FUTF8Password    write SetUTF8Password;
+    property  UTF8Password: string              read FUTF8Password    write SetUTF8Password;
 {$ENDIF}
     property  Mode: TCodecMode                  read GetMode;
     property  isUserAborted: boolean            read GetAborted       write SetAborted;
@@ -331,7 +341,7 @@ implementation
 
 
 
-uses SysUtils, Math, TPLB3.SHA1, TPLB3.ECB, TPLB3.Random, TPLB3.Decorators,
+uses Math, TPLB3.SHA1, TPLB3.ECB, TPLB3.Random, TPLB3.Decorators,
      TPLB3.BinaryUtils, TPLB3.I18n
 {$IF CompilerVersion >= 21}
      , Rtti
@@ -570,8 +580,9 @@ end;
 
 
 
-procedure TSimpleCodec.Init( const Key: string);
+procedure TSimpleCodec.Init( const Key: string{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF});
 var
+  {$IFDEF UNICODE}KeyBytes: TBytes;{$ENDIF}
   InputSeedSize, OutputSeedSize: integer;
   MinSize, MaxSize: integer;
 begin
@@ -580,7 +591,12 @@ if Key = '' then
 InitCheck;
 // The key is based on a hash of the Key string for symetric ciphers.
 try
+  {$IFDEF UNICODE}
+  KeyBytes := Encoding.GetBytes( Key);
+  InputSeedSize  := Length( KeyBytes);
+  {$ELSE}
   InputSeedSize  := Length( Key) * SizeOf( Char);
+  {$ENDIF}
   OutputSeedSize := CalculateOutputSeedSize(
     FParameterizedStreamCipher, InputSeedSize, MinSize, MaxSize);
   if OutputSeedSize = -1 then
@@ -594,11 +610,15 @@ try
           // No hash. The key seed is just perfect size. Just use it.
           FBuffer.Size := InputSeedSize;
           if InputSeedSize > 0 then
-            Move( Key[1], FBuffer.Memory^, InputSeedSize)
+            Move( {$IFDEF UNICODE}KeyBytes[0]{$ELSE}Key[1]{$ENDIF}, FBuffer.Memory^, InputSeedSize)
           end
         else
           begin
+          {$IFDEF UNICODE}
+          FPasswordHasher.HashBytes( KeyBytes);
+          {$ELSE}
           FPasswordHasher.HashString( Key);
+          {$ENDIF}
           SpreadHashIntoBuffer(
                 FBuffer, FPasswordHasher, MinSize, MaxSize, OutputSeedSize)
           end;
@@ -619,46 +639,18 @@ end;
 
 
 {$IFDEF UNICODE}
-procedure TSimpleCodec.InitA( const Key: utf8string);
-var
-  InputSeedSize, OutputSeedSize: integer;
-  MinSize, MaxSize: integer;
+procedure TSimpleCodec.Init( const Key: string);
 begin
-if Key = '' then
-  raise Exception.Create( ES_NoPassword);
-InitCheck;
-try
-  InputSeedSize  := Length( Key) * SizeOf( ansichar);
-  OutputSeedSize := CalculateOutputSeedSize(
-    FParameterizedStreamCipher, InputSeedSize, MinSize, MaxSize);
-  if OutputSeedSize = -1 then
-      FBuffer.Clear
-    else
-      begin
-      if InputSeedSize = OutputSeedSize then
-          begin
-          FBuffer.Size := InputSeedSize;
-          if InputSeedSize > 0 then
-            Move( Key[1], FBuffer.Memory^, InputSeedSize)
-          end
-        else
-          begin
-          FPasswordHasher.Hashutf8string( RawByteString( Key));
-          SpreadHashIntoBuffer(
-                FBuffer, FPasswordHasher, MinSize, MaxSize, OutputSeedSize)
-          end;
-      FBuffer.Position := 0
-      end;
-  FKey := FParameterizedStreamCipher.GenerateKey( FBuffer)
-finally
-  FPasswordHasher.Burn;
-  BurnMemoryStream( FBuffer)
-  end;
-if FisUserAborted then
-    FMode := cmUnitialized
-  else
-    FMode := cmIdle;
-FisSalting := False
+  Init( Key, TEncoding.Unicode);
+end;
+{$ENDIF}
+
+
+
+{$IFDEF UNICODE}
+procedure TSimpleCodec.InitA( const Key: string);
+begin
+  Init( Key, TEncoding.UTF8);
 end;
 {$ENDIF}
 
@@ -905,52 +897,20 @@ FisSalting := False
 end;
 
 
-procedure TSimpleCodec.Decryptutf8string(
-  var Plaintext: utf8string;
-  const CipherText_Base64: utf8string);
-var
-  Temp, Ciphertext: TMemoryStream;
-  L: integer;
+{$IFDEF UNICODE}
+procedure TSimpleCodec.DecryptUtf8string( var Plaintext: string; const CipherText_Base64: string);
 begin
-Temp := TMemoryStream.Create;
-Ciphertext := TMemoryStream.Create;
-try
-  if isNotBase64Converter then
-      Base64_to_stream( CipherText_Base64, Ciphertext)
-    else
-      // If its already a Base64 encoder, no point in double-encoding it as base64.
-      utf8string_to_stream( CipherText_Base64, Ciphertext);
-  Begin_DecryptMemory( Temp);
-  L := Ciphertext.Size;
-  if L > 0 then
-    DecryptMemory( Ciphertext.Memory^, L);
-  End_DecryptMemory;
-  if FisUserAborted then
-      Plaintext := ''
-    else
-      begin
-      Temp.Position := 0;
-      L := Temp.Size;
-      SetLength( Plaintext, L div SizeOf( AnsiChar));
-      if L > 0 then
-        Temp.Read( Plaintext[1], L)
-      end
-finally
-  BurnMemoryStream( Temp);
-  BurnMemoryStream( Ciphertext);
-  Temp.Free;
-  Ciphertext.Free
-end end;
-
-
-procedure TSimpleCodec.DecryptAnsistring(
-  var Plaintext: Ansistring; const CipherText_Base64: utf8string);
-var
-  uPlainText: utf8string;
-begin
-DecryptUtf8string( uPlainText, CipherText_Base64);
-PlainText := AnsiString( uPlainText)
+  DecryptString( Plaintext, CipherText_Base64, TEncoding.UTF8);
 end;
+{$ENDIF}
+
+
+{$IFDEF UNICODE}
+procedure TSimpleCodec.DecryptAnsistring( var Plaintext: string; const CipherText_Base64: string);
+begin
+  DecryptString( Plaintext, CipherText_Base64, TEncoding.{$IFDEF ANSI}ANSI{$ELSE}ASCII{$ENDIF});
+end;
+{$ENDIF}
 
 
 const FileStreamOpenMode: array[ boolean ] of word = (
@@ -1012,7 +972,7 @@ end end;
 
 procedure TSimpleCodec.DecryptString(
   var Plaintext: string;
-  const CipherText_Base64: utf8string);
+  const CipherText_Base64: string{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF});
 var
   Temp, Ciphertext: TMemoryStream;
   L: integer;
@@ -1024,23 +984,18 @@ try
       Base64_to_stream( CipherText_Base64, Ciphertext)
     else
       // If its already a Base64 encoder, no point in double-encoding it as base64.
-      utf8string_to_stream( CipherText_Base64, Ciphertext);
+      String_to_stream( CipherText_Base64, Ciphertext{$IFDEF UNICODE}, TEncoding.UTF8{$ENDIF});
   Begin_DecryptMemory( Temp);
   L := Ciphertext.Size;
   if L > 0 then
     DecryptMemory( Ciphertext.Memory^, L);
   End_DecryptMemory;
   if FisUserAborted then
-      Plaintext := ''
+      SetLength( Plaintext, 0)
     else
       begin
       Temp.Position := 0;
-      L := Temp.Size;
-      SetLength( Plaintext, L div SizeOf( Char));
-      if (L mod SizeOf( Char)) <> 0 then
-        Dec( L, L mod SizeOf( Char));
-      if L > 0 then
-        Temp.Read( Plaintext[1], L)
+      Plaintext := Stream_to_string( Temp{$IFDEF UNICODE}, Encoding{$ENDIF});
       end
 finally
   BurnMemoryStream( Temp);
@@ -1050,46 +1005,33 @@ finally
 end end;
 
 
-procedure TSimpleCodec.Encryptutf8string(
-  const Plaintext: utf8string;
-  var CipherText_Base64: utf8string);
-var
-  Temp: TMemoryStream;
-  L: integer;
+{$IFDEF UNICODE}
+procedure TSimpleCodec.DecryptString(
+  var Plaintext: string;
+  const CipherText_Base64: string);
 begin
-Temp := TMemoryStream.Create;
-try
-  Begin_EncryptMemory( Temp);
-  L := Length( Plaintext) * SizeOf( AnsiChar);
-  if L > 0 then
-    EncryptMemory( Plaintext[1], L);
-  End_EncryptMemory;
-  if FisUserAborted then
-      CipherText_Base64 := ''
-    else
-      begin
-      Temp.Position := 0;
-      if isNotBase64Converter then
-          CipherText_Base64 := Stream_to_Base64( Temp)
-        else
-          // If its already a Base64 encoder, no point in double-encoding it as base64.
-          CipherText_Base64 := Stream_to_utf8string( Temp)
-      end
-finally
-  BurnMemoryStream( Temp);
-  Temp.Free
-end end;
-
-
-
-procedure TSimpleCodec.EncryptAnsistring(
-  const Plaintext: Ansistring; var CipherText_Base64: utf8string);
-var
- uPlaintext: utf8string;
-begin
-uPlaintext := Utf8String( Plaintext);
-EncryptUtf8string( uPlaintext, CipherText_Base64)
+  DecryptString( Plaintext, CipherText_Base64, TEncoding.UTF8);
 end;
+{$ENDIF}
+
+
+{$IFDEF UNICODE}
+procedure TSimpleCodec.EncryptUtf8string( const Plaintext: string; var CipherText_Base64: string);
+begin
+  EncryptString( Plaintext, CipherText_Base64, TEncoding.UTF8);
+end;
+{$ENDIF}
+
+
+
+{$IFDEF UNICODE}
+procedure TSimpleCodec.EncryptAnsistring( const Plaintext: string; var CipherText_Base64: string);
+begin
+  EncryptString( Plaintext, CipherText_Base64, TEncoding.{$IFDEF ANSI}ANSI{$ELSE}ASCII{$ENDIF});
+end;
+{$ENDIF}
+
+
 
 procedure TSimpleCodec.EncryptFile(
   const Plaintext_FileName,
@@ -1233,17 +1175,22 @@ end end;
 
 procedure TSimpleCodec.EncryptString(
   const Plaintext: string;
-  var CipherText_Base64: utf8string);
+  var CipherText_Base64: string{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF});
 var
-  Temp: TMemoryStream;
   L: integer;
+  {$IFDEF UNICODE}PlaintextBytes: TBytes;{$ENDIF}
+  Temp: TMemoryStream;
 begin
 Temp := TMemoryStream.Create;
 try
   Begin_EncryptMemory( Temp);
+  {$IFDEF UNICODE}
+  PlaintextBytes := Encoding.GetBytes( Plaintext);
+  L := Length( PlaintextBytes);
+  {$ELSE}
   L := Length( Plaintext) * SizeOf( Char);
-  if L > 0 then
-    EncryptMemory( Plaintext[1], L);
+  {$ENDIF}
+  EncryptMemory( {$IFDEF UNICODE}PlaintextBytes[0]{$ELSE}Plaintext[1]{$ENDIF}, L);
   End_EncryptMemory;
   if FisUserAborted then
       CipherText_Base64 := ''
@@ -1254,11 +1201,22 @@ try
           CipherText_Base64 := Stream_to_Base64( Temp)
         else
           // If its already a Base64 encoder, no point in double-encoding it as base64.
-          CipherText_Base64 := Stream_to_utf8string( Temp)
+          CipherText_Base64 := Stream_to_string( Temp{$IFDEF UNICODE}, TEncoding.UTF8{$ENDIF})
       end
 finally
   Temp.Free
 end end;
+
+
+
+{$IFDEF UNICODE}
+procedure TSimpleCodec.EncryptString(
+  const Plaintext: string;
+  var CipherText_Base64: string);
+begin
+  EncryptString( Plaintext, CipherText_Base64, TEncoding.UTF8);
+end;
+{$ENDIF}
 
 
 
@@ -1640,26 +1598,22 @@ end;
 
 
 
-procedure TCodec.DecryptUtf8string(
-  var Plaintext: utf8string; const CipherText_Base64: utf8string);
+{$IFDEF UNICODE}
+procedure TCodec.DecryptUtf8string( var Plaintext: string; const CipherText_Base64: string);
 begin
-InterfacesAreCached := True;
-BeginEncDec;
-FWorkLoad := Length( CipherText_Base64) * SizeOf( AnsiChar);
-FCodec.Decryptutf8string( Plaintext, CipherText_Base64);
-EndEncDec
+   DecryptString( Plaintext, CipherText_Base64, TEncoding.UTF8);
 end;
+{$ENDIF}
 
 
 
-procedure TCodec.DecryptAnsistring(
-  var Plaintext: Ansistring; const CipherText_Base64: utf8string);
-var
-  uPlaintext: utf8string;
+{$IFDEF UNICODE}
+procedure TCodec.DecryptAnsistring( var Plaintext: string; const CipherText_Base64: string);
 begin
-DecryptUtf8string( uPlaintext, CipherText_Base64);
-Plaintext := AnsiString( uPlaintext)
+   DecryptString( Plaintext, CipherText_Base64, TEncoding.{$IFDEF ANSI}ANSI{$ELSE}ASCII{$ENDIF});
 end;
+{$ENDIF}
+
 
 procedure TCodec.DecryptFile(
   const Plaintext_FileName, CipherText_FileName: string);
@@ -1694,14 +1648,25 @@ end;
 
 
 procedure TCodec.DecryptString(
-  var Plaintext: string; const CipherText_Base64: utf8string);
+  var Plaintext: string; const CipherText_Base64: string{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF});
 begin
 InterfacesAreCached := True;
 BeginEncDec;
-FWorkLoad := Length( CipherText_Base64) * SizeOf( AnsiChar);
-FCodec.DecryptString( Plaintext, CipherText_Base64);
+FWorkLoad := Length( CipherText_Base64) * SizeOf( Char);
+FCodec.DecryptString( Plaintext, CipherText_Base64{$IFDEF UNICODE}, Encoding{$ENDIF});
 EndEncDec
 end;
+
+
+
+{$IFDEF UNICODE}
+procedure TCodec.DecryptString(
+  var Plaintext: string; const CipherText_Base64: string);
+begin
+  DecryptString( Plaintext, CipherText_Base64, TEncoding.UTF8);
+end;
+{$ENDIF}
+
 
 
 procedure TCodec.Dummy( const Value: string);
@@ -1710,26 +1675,21 @@ end;
 
 
 
-procedure TCodec.Encryptutf8string(
-  const Plaintext: utf8string; var CipherText_Base64: utf8string);
+{$IFDEF UNICODE}
+procedure TCodec.EncryptUtf8string( const Plaintext: string; var CipherText_Base64: string);
 begin
-InterfacesAreCached := True;
-BeginEncDec;
-FWorkLoad := Length( Plaintext) * SizeOf( AnsiChar);
-FCodec.Encryptutf8string( Plaintext, CipherText_Base64);
-EndEncDec;
+  EncryptString( Plaintext, CipherText_Base64, TEncoding.UTF8);
 end;
+{$ENDIF}
 
 
 
-procedure TCodec.EncryptAnsistring(
-  const Plaintext: Ansistring; var CipherText_Base64: utf8string);
-var
- uPlaintext: utf8string;
+{$IFDEF UNICODE}
+procedure TCodec.EncryptAnsistring( const Plaintext: string; var CipherText_Base64: string);
 begin
-uPlaintext := Utf8String( Plaintext);
-EncryptUtf8string( uPlaintext, CipherText_Base64)
+  EncryptString( Plaintext, CipherText_Base64, TEncoding.{$IFDEF ANSI}ANSI{$ELSE}ASCII{$ENDIF});
 end;
+{$ENDIF}
 
 procedure TCodec.EncryptFile(
   const Plaintext_FileName, CipherText_FileName: string);
@@ -1765,13 +1725,23 @@ end;
 
 
 procedure TCodec.EncryptString(
-  const Plaintext: string; var CipherText_Base64: utf8string);
+  const Plaintext: string; var CipherText_Base64: string{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF});
 begin
 InterfacesAreCached := True;
 BeginEncDec;
-FCodec.EncryptString( Plaintext, CipherText_Base64);
+FCodec.EncryptString( Plaintext, CipherText_Base64{$IFDEF UNICODE}, Encoding{$ENDIF});
 EndEncDec
 end;
+
+
+
+{$IFDEF UNICODE}
+procedure TCodec.EncryptString(
+  const Plaintext: string; var CipherText_Base64: string);
+begin
+  EncryptString( Plaintext, CipherText_Base64, TEncoding.UTF8);
+end;
+{$ENDIF}
 
 
 
@@ -2015,16 +1985,22 @@ end;
 procedure TCodec.ClearPassword;
 begin
 if FPassword <> '' then
-  BurnMemory( FPassword[1], Length( FPassword) * SizeOf( Char));
+  BurnMemory( FPassword[{$IFDEF STRINGHELPER}Low( FPassword){$ELSE}1{$ENDIF}], Length( FPassword) * SizeOf( Char));
 FPassword := ''
 end;
 
 {$IFDEF UNICODE}
 procedure TCodec.ClearUTF8Password;
+var
+  PasswordBytes: TBytes;
 begin
 if FUTF8Password <> '' then
-  BurnMemory( FUTF8Password[1], Length( FPassword) * SizeOf( AnsiChar));
-FUTF8Password := ''
+  begin
+  PasswordBytes := TEncoding.UTF8.GetBytes( FUTF8Password);
+  BurnMemory( FUTF8Password[{$IFDEF STRINGHELPER}Low( FPassword){$ELSE}1{$ENDIF}], Length( PasswordBytes));
+  BurnMemory( PasswordBytes[0], Length( PasswordBytes));
+  FUTF8Password := ''
+  end;
 end;
 {$ENDIF}
 
@@ -2122,7 +2098,7 @@ end;
 
 
 {$IFDEF UNICODE}
-procedure TCodec.SetUTF8Password( const NewPassword: utf8string);
+procedure TCodec.SetUTF8Password( const NewPassword: string);
 begin
 FUTF8Password := NewPassword;
 if FUTF8Password <> '' then

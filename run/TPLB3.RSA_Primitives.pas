@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.RSA_Primitives;
 // This unit implements the primitives specified in RFC-3447
 // http://www.ietf.org/rfc/rfc3447.txt  &

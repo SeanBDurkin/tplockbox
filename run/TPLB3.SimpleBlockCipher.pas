@@ -28,16 +28,14 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.SimpleBlockCipher;
 interface
-uses Classes, TPLB3.StreamCipher, TPLB3.BlockCipher;
+uses Classes, SysUtils, TPLB3.StreamCipher, TPLB3.BlockCipher, TPLB3.Compatibility;
 
 type
 TSimpleBlockCipherKey = class;
-
-{$IF CompilerVersion < 21}
-RawByteString = utf8string;
-{$IFEND}
 
 TSimpleBlockCipher = class( TInterfacedObject,
     IBlockCipher, ICryptoGraphicAlgorithm)
@@ -53,15 +51,15 @@ TSimpleBlockCipher = class( TInterfacedObject,
     function  KeySize: integer;
     function  SeedByteSize: integer;
     function  MakeBlockCodec( Key: TSymetricKey): IBlockCodec;
-    function  SelfTest_Key: utf8string;
-    function  SelfTest_Plaintext: utf8string;
-    function  SelfTest_Ciphertext: utf8string;
+    function  SelfTest_Key: string;
+    function  SelfTest_Plaintext: string;
+    function  SelfTest_Ciphertext: string;
 
   protected
     function  Encrypt(
-      const Buffer: RawByteString;
+      const Buffer: TBytes;
       Key: TSimpleBlockCipherKey;
-      doEncrypt: boolean): RawByteString; virtual; abstract;
+      doEncrypt: boolean): TBytes; virtual; abstract;
 
   public
     FProgId: string;
@@ -80,7 +78,7 @@ TSimpleBlockCipherClass = class of TSimpleBlockCipher;
 
 TSimpleBlockCipherKey = class( TSymetricKey)
   public
-    FKeyData: RawByteString;
+    FKeyData: TBytes;
 
     procedure   SaveToStream( Stream: TStream);     override;
     procedure   Burn;                               override;
@@ -89,7 +87,7 @@ TSimpleBlockCipherKey = class( TSymetricKey)
 TSimpleBlockCipherCodec = class( TInterfacedObject, IBlockCodec)
   protected
     FKey: TSimpleBlockCipherKey;
-    FBuffer: RawByteString;
+    FBuffer: TBytes;
     FCipher: TSimpleBlockCipher;
 
     procedure Encrypt_Block( Plaintext{in}, Ciphertext{out}: TMemoryStream);
@@ -153,7 +151,7 @@ begin
 Res := TSimpleBlockCipherKey.Create;
 SetLength( Res.FKeyData, FBlockSizeInBytes);
 result := Res;
-Seed.Read( Res.FKeyData[1], SizeOf( Res.FKeyData))
+Seed.Read( Res.FKeyData[0], SizeOf( Res.FKeyData))
 end;
 
 
@@ -169,7 +167,7 @@ var
 begin
 Res := TSimpleBlockCipherKey.Create;
 result := Res;
-Store.Read( Res.FKeyData[1], SizeOf( Res.FKeyData))
+Store.Read( Res.FKeyData[0], SizeOf( Res.FKeyData))
 end;
 
 
@@ -182,8 +180,8 @@ Res := TSimpleBlockCipherCodec.Create;
 result := Res;
 Res.FKey := Key as TSimpleBlockCipherKey;
 SetLength( Res.FBuffer, FBlockSizeInBytes);
-for j := 1 to Length( Res.FBuffer) do
-  Res.FBuffer[ j] := #0;
+for j := 0 to Length( Res.FBuffer) - 1 do
+  Res.FBuffer[ j] := 0;
 Res.FCipher := self
 end;
 
@@ -202,17 +200,17 @@ result := FBlockSizeInBytes
 end;
 
 
-function TSimpleBlockCipher.SelfTest_Ciphertext: utf8string;
+function TSimpleBlockCipher.SelfTest_Ciphertext: string;
 begin
 result := ''
 end;
 
-function TSimpleBlockCipher.SelfTest_Key: utf8string;
+function TSimpleBlockCipher.SelfTest_Key: string;
 begin
 result := ''
 end;
 
-function TSimpleBlockCipher.SelfTest_Plaintext: utf8string;
+function TSimpleBlockCipher.SelfTest_Plaintext: string;
 begin
 result := ''
 end;
@@ -228,8 +226,8 @@ procedure TSimpleBlockCipherCodec.Burn;
 var
   j: integer;
 begin
-for j := 1 to Length( FBuffer) do
-  FBuffer[ j] := #0
+for j := 0 to Length( FBuffer) - 1 do
+  FBuffer[ j] := 0
 end;
 
 
@@ -238,9 +236,9 @@ procedure TSimpleBlockCipherCodec.Decrypt_Block( Plaintext, Ciphertext: TMemoryS
 begin
 Ciphertext.Position := 0;
 Plaintext.Position := 0;
-Ciphertext.Read( FBuffer[1], Length( FBuffer));
+Ciphertext.Read( FBuffer[0], Length( FBuffer));
 FBuffer := FCipher.Encrypt( FBuffer, FKey, False);
-Plaintext.Write( FBuffer[1], Length( FBuffer))
+Plaintext.Write( FBuffer[0], Length( FBuffer))
 end;
 
 
@@ -249,9 +247,9 @@ procedure TSimpleBlockCipherCodec.Encrypt_Block( Plaintext, Ciphertext: TMemoryS
 begin
 Plaintext.Position := 0;
 Ciphertext.Position := 0;
-Plaintext.Read( FBuffer[1], Length( FBuffer));
+Plaintext.Read( FBuffer[0], Length( FBuffer));
 FBuffer := FCipher.Encrypt( FBuffer, FKey, True);
-Ciphertext.Write( FBuffer[1], Length( FBuffer))
+Ciphertext.Write( FBuffer[0], Length( FBuffer))
 end;
 
 procedure TSimpleBlockCipherCodec.Reset;
@@ -264,14 +262,14 @@ procedure TSimpleBlockCipherKey.Burn;
 var
   j: integer;
 begin
-for j := 1 to Length( FKeyData) do
-  FKeyData[ j] := #0
+for j := 0 to Length( FKeyData) - 1 do
+  FKeyData[ j] := 0
 end;
 
 
 procedure TSimpleBlockCipherKey.SaveToStream( Stream: TStream);
 begin
-Stream.Write( FKeyData[1], Length( FKeyData))
+Stream.Write( FKeyData[0], Length( FKeyData))
 end;
 
 end.
