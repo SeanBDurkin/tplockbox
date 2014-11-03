@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.SHA1;
 interface
 uses classes, TPLB3.HashDsc, TPLB3.StreamCipher;
@@ -79,8 +81,8 @@ TSHA1_Hasher = class( TInterfacedObject, IHasher)
     procedure  Update( Source{in}: TMemoryStream);
     procedure  End_Hash( PartBlock{in}: TMemoryStream; Digest: TStream);
     procedure  Burn;
-    function   SelfTest_Source: utf8string;
-    function   SelfTest_ReferenceHashValue: utf8string;
+    function   SelfTest_Source: string;
+    function   SelfTest_ReferenceHashValue: string;
   end;
 
 
@@ -214,7 +216,7 @@ end;
 
 
 
-function TSHA1_Hasher.SelfTest_Source: utf8string;
+function TSHA1_Hasher.SelfTest_Source: string;
 // From sample 2 of Appendix B of reference 1.
 begin
 result := 'abcdbcdecdefdefgefghfghighijhijkijkljklmklmnlmnomnopnopq'
@@ -223,7 +225,7 @@ end;
 
 
 
-function TSHA1_Hasher.SelfTest_ReferenceHashValue: utf8string;
+function TSHA1_Hasher.SelfTest_ReferenceHashValue: string;
 // From sample 2 of Appendix B of reference 1.
 begin
 result := '84983E44 1C3BD26E BAAE4AA1 F95129E5 E54670F1'

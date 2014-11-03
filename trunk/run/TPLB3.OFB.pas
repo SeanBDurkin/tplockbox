@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.OFB;
 interface
 uses Classes, TPLB3.StreamCipher, TPLB3.BlockCipher;

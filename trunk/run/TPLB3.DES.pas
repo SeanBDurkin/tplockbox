@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.DES;
 interface
 uses Classes, TPLB3.BlockCipher, TPLB3.StreamCipher;
@@ -48,9 +50,9 @@ TDES = class( TInterfacedObject,
     function  KeySize: integer;
     function  SeedByteSize: integer; // Size that the input of the GenerateKey must be.
     function  MakeBlockCodec( Key: TSymetricKey): IBlockCodec;
-    function  SelfTest_Key: utf8string;
-    function  SelfTest_Plaintext: utf8string;
-    function  SelfTest_Ciphertext: utf8string;
+    function  SelfTest_Key: string;
+    function  SelfTest_Plaintext: string;
+    function  SelfTest_Ciphertext: string;
 
   public
     constructor Create;
@@ -86,7 +88,7 @@ implementation
 
 
 
-uses TPLB3.Constants, Windows, SysUtils, TPLB3.I18n;
+uses TPLB3.Constants, SysUtils, TPLB3.I18n;
 
 { Information Resources
   =====================
@@ -1236,7 +1238,7 @@ end;
 
 
 
-function TDES.SelfTest_Plaintext: utf8string;
+function TDES.SelfTest_Plaintext: string;
 { This from "FIPS PUB 81 - DES MODES OF OPERATION"
 (http://www.itl.nist.gov/fipspubs/fip81.htm)
 TABLE B1: AN EXAMPLE OF THE ELECTRONIC CODEBOOK (ECB) MODE
@@ -1261,12 +1263,12 @@ result := '4e6f772069732074'
 end;
 
 
-function TDES.SelfTest_Ciphertext: utf8string;
+function TDES.SelfTest_Ciphertext: string;
 begin
 result := '3fa40e8a984d4815'
 end;
 
-function TDES.SelfTest_Key: utf8string;
+function TDES.SelfTest_Key: string;
 begin
 result := '0123456789abcdef'
 end;

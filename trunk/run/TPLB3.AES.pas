@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.AES;
 interface
 uses Classes, TPLB3.BlockCipher, TPLB3.StreamCipher, TPLB3.Decorators;
@@ -71,9 +73,9 @@ TAES = class( TInterfacedObject,
     function  BlockSize: integer;  // in units of bits. Must be a multiple of 8.
     function  KeySize: integer;
     function  MakeBlockCodec( Key: TSymetricKey): IBlockCodec;
-    function  SelfTest_Key: utf8string;
-    function  SelfTest_Plaintext: utf8string;
-    function  SelfTest_Ciphertext: utf8string;
+    function  SelfTest_Key: string;
+    function  SelfTest_Plaintext: string;
+    function  SelfTest_Ciphertext: string;
     function  ControlObject: TObject;
 
   public
@@ -422,7 +424,7 @@ result := FKeySize div 8
 end;
 
 
-function TAES.SelfTest_Key: utf8string;  // Refer appendix C.
+function TAES.SelfTest_Key: string;  // Refer appendix C.
 begin
 case FKeySize of
   128: result := '000102030405060708090a0b0c0d0e0f';
@@ -432,13 +434,13 @@ case FKeySize of
 end;
 
 
-function TAES.SelfTest_Plaintext: utf8string; // Refer appendix C.
+function TAES.SelfTest_Plaintext: string; // Refer appendix C.
 begin
 result := '00112233445566778899aabbccddeeff'
 end;
 
 
-function TAES.SelfTest_Ciphertext: utf8string;  // Refer appendix C.
+function TAES.SelfTest_Ciphertext: string;  // Refer appendix C.
 begin
 case FKeySize of
   128: result := '69c4e0d86a7b0430d8cdb78070b4c55a';

@@ -28,10 +28,11 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.CodecIntf;
-{$M-}
 interface
-uses Classes, TPLB3.StreamCipher, TPLB3.BlockCipher,
+uses Classes, SysUtils, TPLB3.StreamCipher, TPLB3.BlockCipher,
      TPLB3.CryptographicLibrary;
 
 type
@@ -67,9 +68,10 @@ ICodec = interface
 
     function  GetCipherDisplayName( Lib: TCryptographicLibrary): string;
 
-    procedure Init ( const Key: string);
+    procedure Init( const Key: string); overload;
 {$IFDEF UNICODE}
-    procedure InitA( const Key: utf8string);
+    procedure Init( const Key: string; Encoding: TEncoding); overload;
+    procedure InitA( const Key: string);
 {$ENDIF}
     procedure SaveKeyToStream( Store: TStream);
     procedure InitFromStream( Store: TStream);
@@ -110,14 +112,19 @@ ICodec = interface
     procedure EncryptFile( const Plaintext_FileName, CipherText_FileName: string);
     procedure DecryptFile( const Plaintext_FileName, CipherText_FileName: string);
 
-    procedure EncryptString( const Plaintext: string; var CipherText_Base64: utf8string);
-    procedure DecryptString( var Plaintext: string; const CipherText_Base64: utf8string);
+    procedure EncryptString( const Plaintext: string; var CipherText_Base64: string); overload;
+    procedure DecryptString( var Plaintext: string; const CipherText_Base64: string); overload;
 
-    procedure EncryptAnsistring( const Plaintext: Ansistring; var CipherText_Base64: utf8string);
-    procedure DecryptAnsistring( var Plaintext: Ansistring; const CipherText_Base64: utf8string);
+{$IFDEF UNICODE}
+    procedure EncryptString( const Plaintext: string; var CipherText_Base64: string; Encoding: TEncoding); overload;
+    procedure DecryptString( var Plaintext: string; const CipherText_Base64: string; Encoding: TEncoding); overload;
 
-    procedure EncryptUtf8string( const Plaintext: utf8string; var CipherText_Base64: utf8string);
-    procedure DecryptUtf8string( var Plaintext: utf8string; const CipherText_Base64: utf8string);
+    procedure EncryptAnsistring( const Plaintext: string; var CipherText_Base64: string); deprecated;
+    procedure DecryptAnsistring( var Plaintext: string; const CipherText_Base64: string); deprecated;
+
+    procedure EncryptUtf8string( const Plaintext: string; var CipherText_Base64: string); deprecated;
+    procedure DecryptUtf8string( var Plaintext: string; const CipherText_Base64: string); deprecated;
+{$ENDIF}
 
     function  GetAborted: boolean;
     procedure SetAborted( Value: boolean);

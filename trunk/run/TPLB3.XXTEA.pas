@@ -1,3 +1,5 @@
+{$I TPLB3.Common.inc}
+
 unit TPLB3.XXTEA;
 {* ***** BEGIN LICENSE BLOCK *****
 Copyright 2010 Sean B. Durkin
@@ -104,11 +106,8 @@ implementation
 
 
 uses SysUtils, Math, TPLB3.StreamUtils, TPLB3.Constants, TPLB3.StreamToBlock,
-     TPLB3.PointerArithmetic, TPLB3.I18n, TPLB3.CBC, TPLB3.Random
-{$IF compilerversion <= 17}
-, uTPLb_D7Compatibility
-{$IFEND}
-;
+     TPLB3.PointerArithmetic, TPLB3.I18n, TPLB3.CBC, TPLB3.Random,
+     TPLB3.Compatibility;
 
 
 
@@ -210,9 +209,9 @@ TXXTEA_Block = class( TInterfacedObject,
     function  KeySize: integer;  // in units of bits.
     function  SeedByteSize: integer; // Size that the input of the GenerateKey must be.
     function  MakeBlockCodec( Key: TSymetricKey): IBlockCodec;
-    function  SelfTest_Key: utf8string;
-    function  SelfTest_Plaintext: utf8string;
-    function  SelfTest_Ciphertext: utf8string;
+    function  SelfTest_Key: string;
+    function  SelfTest_Plaintext: string;
+    function  SelfTest_Ciphertext: string;
 
   public
     constructor Create( BlockSize1: integer);
@@ -919,17 +918,17 @@ begin
 result := -1 // Not used
 end;
 
-function TXXTEA_Block.SelfTest_Ciphertext: utf8string;
+function TXXTEA_Block.SelfTest_Ciphertext: string;
 begin
 result := '' // Not used
 end;
 
-function TXXTEA_Block.SelfTest_Key: utf8string;
+function TXXTEA_Block.SelfTest_Key: string;
 begin
 result := '' // Not used
 end;
 
-function TXXTEA_Block.SelfTest_Plaintext: utf8string;
+function TXXTEA_Block.SelfTest_Plaintext: string;
 begin
 result := '' // Not used
 end;

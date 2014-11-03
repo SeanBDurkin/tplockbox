@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.TwoFish;
 interface
 uses Classes, TPLB3.BlockCipher, TPLB3.StreamCipher, TPLB3.Decorators;
@@ -68,9 +70,9 @@ TTwoFish = class( TInterfacedObject,
     function  KeySize: integer;
 
     function  MakeBlockCodec( Key: TSymetricKey): IBlockCodec;
-    function  SelfTest_Key: utf8string;
-    function  SelfTest_Plaintext: utf8string;
-    function  SelfTest_Ciphertext: utf8string;
+    function  SelfTest_Key: string;
+    function  SelfTest_Plaintext: string;
+    function  SelfTest_Ciphertext: string;
     function ControlObject: TObject;
 
 {$IF compilerversion >= 21}
@@ -92,11 +94,8 @@ implementation
 
 
 
-uses TPLB3.Constants, SysUtils, TPLB3.DCP.twofish_Modified, Math
-{$IF compilerversion <= 17}
-, uTPLb_D7Compatibility
-{$IFEND}
-;
+uses TPLB3.Constants, SysUtils, TPLB3.DCP.twofish_Modified, Math,
+     TPLB3.Compatibility;
 
 
 
@@ -252,7 +251,7 @@ end;
 //CT=16434FC9C8841A63D58700B5578E8F67
 
 
-function TTwoFish.SelfTest_Ciphertext: utf8string;
+function TTwoFish.SelfTest_Ciphertext: string;
 begin
 result := '16434FC9C8841A63D58700B5578E8F67'
 end;
@@ -260,14 +259,14 @@ end;
 
 
 
-function TTwoFish.SelfTest_Key: utf8string;
+function TTwoFish.SelfTest_Key: string;
 begin
 result := 'AE8109BFDA85C1F2C5038B34ED691BFF3AF6F7CE5BD35EF1'
 end;
 
 
 
-function TTwoFish.SelfTest_Plaintext: utf8string;
+function TTwoFish.SelfTest_Plaintext: string;
 begin
 result := '893FD67B98C550073571BD631263FC78'
 end;

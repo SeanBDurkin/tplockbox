@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.HugeCardinal;
 {.$define profiling}
 interface
@@ -246,7 +248,7 @@ implementation
 
 
 uses SysUtils, TPLB3.StreamUtils, Math, TPLB3.Random, TPLB3.I18n,
-     TPLB3.PointerArithmetic, windows;
+     TPLB3.PointerArithmetic, TPLB3.Compatibility;
 
 
 {$IFDEF profiling}
@@ -424,7 +426,7 @@ FMaxBits := Master.MaxBits;
 FBits := Master.FBits;
 FValue := NewMemoryStream( Master.FValue.Size * 8);
 Move( Master.FValue.Memory^, FValue.Memory^, FValue.Size);
-InterlockedIncrement( HugeCardinal_InstanceCount)
+AtomicIncrement( HugeCardinal_InstanceCount)
 end;
 
 
@@ -442,7 +444,7 @@ if DataByteLen > 0 then
   Move( Master.FValue.Memory^, FValue.Memory^, DataByteLen);
 ClearMem( DataByteLen, FValue.Size - DataByteLen);
 FBits := Master.BitLength;
-InterlockedIncrement( HugeCardinal_InstanceCount)
+AtomicIncrement( HugeCardinal_InstanceCount)
 end;
 
 
@@ -453,7 +455,7 @@ FPool := Pool1;
 FMaxBits := ComputedNeededSize( MaxBits1);
 FValue   := NewMemoryStream( FMaxBits);
 AssignFromStreamIn( ByteOrder, Stream);
-InterlockedIncrement( HugeCardinal_InstanceCount)
+AtomicIncrement( HugeCardinal_InstanceCount)
 end;
 
 
@@ -549,13 +551,13 @@ FMaxBits := ComputedNeededSize( MaxBits1);
 FBits := 0;
 FValue := NewMemoryStream( FMaxBits);
 ZeroFillStream( FValue);
-InterlockedIncrement( HugeCardinal_InstanceCount)
+AtomicIncrement( HugeCardinal_InstanceCount)
 end;
 
 
 destructor THugeCardinal.Destroy;
 begin
-InterlockedDecrement( HugeCardinal_InstanceCount);
+AtomicDecrement( HugeCardinal_InstanceCount);
 FValue.Free;
 inherited
 end;
@@ -573,6 +575,7 @@ var
  Idx: integer;
  P1: PByte;
  StrIdx: integer;
+ {$IFDEF STRINGHELPER}Output: TStringBuilder;{$ENDIF}
 
  function CharOfNibble( Nibble: byte): Char;
  begin
@@ -585,7 +588,12 @@ var
 begin
 // Temp := Clone;
 Idx := (BitLength + 7) div 8;
+{$IFDEF STRINGHELPER}
+Output := TStringBuilder.Create;
+Output.Length := Idx * 2;
+{$ELSE}
 SetLength( result, Idx * 2);
+{$ENDIF}
 P1  := ValuePntr( Idx);
 StrIdx := -1;
 while Idx > 0 do
@@ -594,13 +602,25 @@ while Idx > 0 do
   Dec( Idx);
   Inc( StrIdx, 2);
   ValueByte := P1^;
+  {$IFDEF STRINGHELPER}
+  Output.Chars[StrIdx-1] := CharOfNibble( ValueByte shr 4);
+  Output.Chars[StrIdx  ] := CharOfNibble( ValueByte and $0F)
+  {$ELSE}
   result[StrIdx  ] := CharOfNibble( ValueByte shr 4);
   result[StrIdx+1] := CharOfNibble( ValueByte and $0F)
+  {$ENDIF}
   end;
+{$IFDEF STRINGHELPER}
+if (Output.Length > 0) and (Output.Chars[0] = '0') and (not isZero) then
+  Output.Remove( 0, 1);
+result := Output.ToString;
+Output.Free;
+{$ELSE}
 if (Length( result) > 0) and (result[1] = '0') and (not isZero) then
   Delete( result, 1, 1);
+{$ENDIF}
 if Length( result) = 0 then
-  result := '0'
+  result := '0';
 end;
 
 type Puint64 = ^uint64;

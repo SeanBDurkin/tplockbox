@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.BlowFish;
 interface
 uses Classes, TPLB3.BlockCipher, TPLB3.StreamCipher, TPLB3.Decorators;
@@ -63,9 +65,9 @@ TBlowFish = class( TInterfacedObject,
     function  KeySize: integer;
 
     function  MakeBlockCodec( Key: TSymetricKey): IBlockCodec;
-    function  SelfTest_Key: utf8string;
-    function  SelfTest_Plaintext: utf8string;
-    function  SelfTest_Ciphertext: utf8string;
+    function  SelfTest_Key: string;
+    function  SelfTest_Plaintext: string;
+    function  SelfTest_Ciphertext: string;
     //  IControlObject = interface
     function ControlObject: TObject;
 
@@ -109,11 +111,7 @@ implementation
 
 
 
-uses TPLB3.Constants, SysUtils
-{$IF compilerversion <= 17}
-, uTPLb_D7Compatibility
-{$IFEND}
-  ;
+uses TPLB3.Constants, SysUtils, TPLB3.StreamUtils, TPLB3.Compatibility;
 
 
 function ReverseEndien32( Value: uint32): uint32;
@@ -630,7 +628,7 @@ end;
 {$IFEND}
 
 
-function TBlowFish.SelfTest_Ciphertext: utf8string;
+function TBlowFish.SelfTest_Ciphertext: string;
 // From http://webnet77.com/cgi-bin/helpers/blowfish.pl
 begin
 result := 'EE69A226ED1C0939'
@@ -638,49 +636,61 @@ result := 'EE69A226ED1C0939'
 end;
 
 
-function AnsiToBigEndienHex( const StraightAnsiValue: utf8string): utf8string;
+function AnsiToBigEndienHex( const StraightAnsiValue: string): string;
 var
   L, i: integer;
   C: byte;
+  {$IFDEF STRINGHELPER}Output: TStringBuilder;{$ENDIF}
 
-  function NibbleToChar( Ch: byte): ansichar;
+  function NibbleToChar( Ch: byte): Char;
   begin
   if Ch <= 9 then
-      result := AnsiChar( Ch      + Ord( '0'))
+      result := Chr( Ch      + Ord( '0'))
     else
-      result := AnsiChar( Ch - 10 + Ord( 'A'))
+      result := Chr( Ch - 10 + Ord( 'A'))
   end;
 
 begin
 L := Length( StraightAnsiValue);
+{$IFDEF STRINGHELPER}
+Output := TStringBuilder.Create;
+{$ELSE}
 SetLength( result, 2 * L);
-for i := 1 to L do
+{$ENDIF}
+for i := 0 to L - 1 do
   begin
-  C := Ord( StraightAnsiValue[i]);
-  result[i*2 - 1] := NibbleToChar( C shr 4);
-  result[i*2    ] := NibbleToChar( C and $0F)
-  end
+  {$IFDEF STRINGHELPER}
+  C := Ord( StraightAnsiValue.Chars[i]);
+  Output.Append(NibbleToChar( C shr 4));
+  Output.Append(NibbleToChar( C and $0F));
+  {$ELSE}
+  C := Ord( StraightAnsiValue[i + 1]);
+  result[i*2 + 1] := NibbleToChar( C shr 4);
+  result[i*2 + 2] := NibbleToChar( C and $0F);
+  {$ENDIF}
+  end;
+{$IFDEF STRINGHELPER}
+result := Output.ToString;
+Output.Free;
+{$ENDIF}
 end;
 
 
 
-function TBlowFish.SelfTest_Key: utf8string;
+function TBlowFish.SelfTest_Key: string;
 // From http://webnet77.com/cgi-bin/helpers/blowfish.pl
 var
-  KeyAsString, s: utf8string;
+  KeyAsString, s: string;
   BlowfishKey: TBlowfishKey;
   Temp: TMemoryStream;
-  L: integer;
 
 begin
-// 1. Start with utf8string 'abcdefgh'
+// 1. Start with string 'abcdefgh'
 KeyAsString := 'abcdefgh';
 
 // 2. Make a Blowfish key
-L := Length( KeyAsString) * SizeOf( AnsiChar);
 Temp := TMemoryStream.Create;
-Temp.Size := L;
-Move( KeyAsString[1], Temp.Memory^, L);
+String_to_stream( KeyAsString, Temp{$IFDEF UNICODE}, TEncoding.ASCII{$ENDIF});
 Temp.Position := 0;
 BlowfishKey := TBlowfishKey.GenerateFromSeed( Temp);
 
@@ -688,10 +698,8 @@ BlowfishKey := TBlowfishKey.GenerateFromSeed( Temp);
 Temp.Size := 0;
 BlowfishKey.SaveToStream( Temp);
 
-// 4. Convert to bigendien hexidecimal encoded utf8string.
-L := Temp.Size;
-SetLength( s, L);
-Move( Temp.Memory^, s[1], L);
+// 4. Convert to bigendien hexidecimal encoded string.
+s := Stream_to_string( Temp{$IFDEF UNICODE}, TEncoding.ASCII{$ENDIF});
 result := AnsiToBigEndienHex( s);
 
 // 5. Clean up.
@@ -701,7 +709,7 @@ end;
 
 
 
-function TBlowFish.SelfTest_Plaintext: utf8string;
+function TBlowFish.SelfTest_Plaintext: string;
 // From http://webnet77.com/cgi-bin/helpers/blowfish.pl
 begin
 result := AnsiToBigEndienHex( '12345678')

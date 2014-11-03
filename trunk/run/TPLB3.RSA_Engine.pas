@@ -28,10 +28,12 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.RSA_Engine;
 interface
 uses Classes, TPLB3.StreamCipher, TPLB3.Asymetric, TPLB3.Codec, TPLB3.CodecIntf,
-     TPLB3.HugeCardinal, TPLB3.MemoryStreamPool;
+     TPLB3.HugeCardinal, TPLB3.MemoryStreamPool, TPLB3.Compatibility;
 
 type
 TRSA_Engine = class( TAsymetric_Engine)
@@ -63,7 +65,7 @@ TRSA_Engine = class( TAsymetric_Engine)
   end;
 
     const
-      RSAKeySig: utf8string = #78#10'LockBox3';
+      RSAKeySig: packed array[0..9] of Byte = (78, 10, 76, 111, 99, 107, 66, 111, 120, 51); // #78#10'LockBox3';
       RSAKeyStoreVersion = 1;
 
     type
@@ -375,7 +377,7 @@ procedure TRSAKeyPart.StoreSmallPartsToStream( const Parts: RSAKeyStorePartSet; 
 var
   Version: integer;
 begin
-Store.WriteBuffer( RSAKeySig[1], Length( RSAKeySig));
+Store.WriteBuffer( RSAKeySig[0], Length( RSAKeySig));
 Version := RSAKeyStoreVersion;
 Store.WriteBuffer( Version, SizeOf( Version));
 Store.WriteBuffer( Parts, SizeOf( Parts));
@@ -405,13 +407,12 @@ procedure TRSAKeyPart.SenseVersion(
   var Version: integer;
   var AvailableParts: RSAKeyStorePartSet);
 var
-  Sig: utf8string;
+  Sig: packed array[0..9] of Byte;
   ReadCount, Count: integer;
   Ok: boolean;
 begin
-SetLength( Sig, Length( RSAKeySig));
-ReadCount := Store.Read( Sig[1], Length( Sig));
-Ok := (ReadCount = Length( Sig)) and (Sig = RSAKeySig);
+ReadCount := Store.Read( Sig[0], Length( Sig));
+Ok := (ReadCount = Length( Sig)) and CompareMem( @Sig[0], @RSAKeySig[0], Length( Sig));
 if Ok then
   begin
   Count := Store.Read( Version, SizeOf( Version));

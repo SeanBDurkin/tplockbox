@@ -318,6 +318,9 @@ under the License.
 ========================================================================
 ========================================================================
  * ***** END LICENSE BLOCK ***** *}
+
+{$I TPLB3.Common.inc}
+
 unit TPLB3.OpenSSL experimental;
 //  {$IFDEF VER150}
 //  unit uTPLb_OpenSSL;
@@ -334,22 +337,29 @@ unit TPLB3.OpenSSL experimental;
 
 interface
 uses Classes, TPLB3.BaseNonVisualComponent, TPLB3.Signatory,
-     TPLB3.Asymetric, SysUtils, Windows, Types
-{$IF compilerversion <= 17}
-     , uTPLb_D7Compatibility
-{$IFEND}
-     ;
+     TPLB3.Asymetric, SysUtils, {$IFDEF MSWINDOWS}Windows,{$ENDIF} Types,
+     TPLB3.Compatibility;
 
 const
-{$IFDEF WIN32}
+{$IF Defined(WIN32)}
   LibEay = 'libeay32.dll';
-{$ENDIF}
-
-{$IFDEF WIN64}
+{$ELSEIF Defined(WIN64)}
   LibEay = 'libeay64.dll';
-{$ENDIF}
-
+{$ELSEIF not Defined(WIN32) and not Defined(WIN64)}
+  LibEay = '';
+{$IFEND}
   Default_AsymetricKeySizeInBits = 2048;
+
+// OpenSSL is not supported on NEXTGEN platforms; these aliases are just to
+// keep the compiler happy.
+{$IFDEF NEXTGEN}
+type
+  AnsiChar = Char;
+  AnsiString = string;
+  PAnsiChar = PWideChar;
+  PAnsiString = ^AnsiString;
+  UTF8String = string;
+{$ENDIF}
 
 type
 TOpenLibError = (
@@ -407,8 +417,8 @@ EVP_CIPHER_CTX = packed record
   xtra: array[0..100] of byte;
 	end;
 
-EVP_CIPHER_varProc = procedure( var a: EVP_CIPHER_CTX) cdecl;
-EVP_CIPHER_intFunc = function ( var a: EVP_CIPHER_CTX): integer cdecl;
+EVP_CIPHER_varProc = procedure( var a: EVP_CIPHER_CTX); cdecl;
+EVP_CIPHER_intFunc = function ( var a: EVP_CIPHER_CTX): integer; cdecl;
 
 PBIO = pointer; // For the curious, you can find a more transparent
                 //  definition of BIO/PBIO in unit IdSSLOpenSSLHeaders,
@@ -525,7 +535,7 @@ PBIO_METHOD = ^BIO_METHOD;
 
 PEVP_CIPHER = pointer;
 
-TOpenSLL_CipherFunc = function: PEVP_CIPHER cdecl;
+TOpenSLL_CipherFunc = function: PEVP_CIPHER; cdecl;
 
 TOnOpenSSLProgress = function( Sender: TObject; p1, p2: integer): boolean of object;
 
@@ -731,7 +741,8 @@ TOpenSSL_Signatory = class( TOpenSSL_Base)
       PreHash: TSigHashKind;
       Message1: pointer; MessageLen: cardinal;
       const Signature: utf8string): boolean; // True for verified good.
-
+
+
     function  PrivateKey_AsPEM( Cipher: TCipherToEncryptPrivateKeyWith; const Password: utf8string): utf8string;
 
     function  GetPrivateKey_AsPEM: utf8string;
@@ -807,7 +818,7 @@ implementation
 
 
 {$WARNINGS OFF}
-uses SyncObjs, Contnrs, TPLB3.Random;
+uses SyncObjs, {$IFDEF GENERICS}Generics.Collections{$ELSE}Contnrs{$ENDIF}, TPLB3.Random;
 
 
 const
@@ -815,7 +826,7 @@ const
 
 var
   OpenSSL_LibGate: TCriticalSection = nil;
-  OpenSSL_Libs   : TObjectList      = nil; // of TOpenSSL_Lib
+  OpenSSL_Libs   : TObjectList{$IFDEF GENERICS}<TOpenSSL_Base>{$ENDIF} = nil; // of TOpenSSL_Lib
 
 {$IFDEF HuntingMemoryLeaks}
   Allocated: int64 = 0;
@@ -947,7 +958,7 @@ procedure TOpenSSL_Base.App_Shutdown;
     Proc: TProc_OneIntParam;
   begin
   if (FHandle = 0) or (ProcName = '') then exit;
-  @Proc := windows.GetProcAddress( FHandle, PChar( ProcName));
+  @Proc := GetProcAddress( FHandle, PChar( ProcName));
   if assigned( Proc) then
     Proc( Value)
   end;
@@ -959,7 +970,7 @@ procedure TOpenSSL_Base.App_Shutdown;
     Proc: TProc_OnePntrParam;
   begin
   if (FHandle = 0) or (ProcName = '') then exit;
-  @Proc := windows.GetProcAddress( FHandle, PChar( ProcName));
+  @Proc := GetProcAddress( FHandle, PChar( ProcName));
   if assigned( Proc) then
     Proc( Value)
   end;
@@ -1017,7 +1028,8 @@ begin
 @FOpenSSLProc_PEM_write_bio_RSAPublicKey := nil;
 @FOpenSSLProc_RSA_sign   := nil;
 @FOpenSSLProc_RSA_verify := nil;
-@FOpenSSLProc_RSA_print  := nil;
+
+@FOpenSSLProc_RSA_print  := nil;
 @FOpenSSLProc_PEM_read_bio_RSAPrivateKey := nil;
 @FOpenSSLProc_BIO_new_mem_buf := nil;
 @FOpenSSLProc_PEM_read_bio_RSAPublicKey := nil;
@@ -1231,7 +1243,7 @@ var
   Proc: TProc_NoParams;
 begin
 if (FHandle = 0) or (ProcName = '') then exit;
-@Proc := windows.GetProcAddress( FHandle, PChar( ProcName));
+@Proc := GetProcAddress( FHandle, PChar( ProcName));
 if assigned( Proc) then
   Proc
 end;
@@ -1306,7 +1318,7 @@ procedure TOpenSSL_Base.GetProcs;
 
   function ProcAddress( const ProcName: string): pointer;
   begin
-  result := windows.GetProcAddress( FHandle, PChar( ProcName))
+  result := GetProcAddress( FHandle, PChar( ProcName))
   end;
 
 begin
@@ -1335,7 +1347,8 @@ if FHandle = 0 then exit;
 @FOpenSSLProc_PEM_write_bio_RSAPublicKey := ProcAddress( 'PEM_write_bio_RSAPublicKey');
 @FOpenSSLProc_RSA_sign   := ProcAddress( 'RSA_sign');
 @FOpenSSLProc_RSA_verify := ProcAddress( 'RSA_verify');
-@FOpenSSLProc_RSA_print  := ProcAddress( 'RSA_print');
+
+@FOpenSSLProc_RSA_print  := ProcAddress( 'RSA_print');
 @FOpenSSLProc_PEM_read_bio_RSAPrivateKey := ProcAddress( 'PEM_read_bio_RSAPrivateKey');
 @FOpenSSLProc_BIO_new_mem_buf := ProcAddress( 'BIO_new_mem_buf');
 @FOpenSSLProc_PEM_read_bio_RSAPublicKey := ProcAddress( 'PEM_read_bio_RSAPublicKey');
@@ -1573,7 +1586,7 @@ if TryOpen(
   begin
   GetProcs;
   if not assigned( OpenSSL_Libs) then
-    OpenSSL_Libs := TObjectList.Create( False);
+    OpenSSL_Libs := TObjectList{$IFDEF GENERICS}<TOpenSSL_Base>{$ENDIF}.Create( False);
   if OpenSSL_Libs.IndexOf( self) = -1 then
     OpenSSL_Libs.Add( self);
   if isLibraryUniqueInstance then
@@ -2071,12 +2084,13 @@ function TOpenSSL_Base.TryOpen( const LibPath, LibName, DLLDir: string;
   const RqrSignatureProc: string; var Err: TOpenLibError; var Handle: HMODULE;
   var WindowsError: DWORD; var FileName, ErrMsg: string; var MajorV, MinorV,
   ReleaseV, BuildV: integer): boolean;
+{$IFDEF MSWINDOWS}
 var
   iLibSize, iValueSize: DWord;
   Buf: ansiString;
   Ok: boolean;
   fvip: pointer;
-
+{$ENDIF}
 begin
 Err := erNull;
 Handle := 0;
@@ -2089,19 +2103,21 @@ MajorV   := 0;
 MinorV   := 0;
 ReleaseV := 0;
 BuildV   := 0;
-{$IFDEF WIN64} {$IFDEF OpenSSL_Win64_NotYetSupported}
+{$IF Defined(WIN64)}
+  {$IF Defined(OpenSSL_Win64_NotYetSupported)}
+    result := False;
+    Err    := erPlatformNotSupported;
+    ErrMsg := 'Win64 platform not yet supported by TOpenSSL_Signatory.';
+    exit;
+  {$IFEND}
+{$ELSEIF not Defined(WIN32)}
   result := False;
   Err    := erPlatformNotSupported;
-  ErrMsg := 'Win64 platform not yet supported by TOpenSSL_Signatory.';
+  ErrMsg := 'This platform not supported by TOpenSSL_Signatory.';
   exit;
-{$ENDIF} {$ENDIF}
-{$IFDEF OSX32}
-  result := False;
-  Err    := erPlatformNotSupported;
-  ErrMsg := 'OSX platform not supported by TOpenSSL_Signatory.';
-  exit;
-{$ENDIF}
+{$IFEND}
 
+{$IFDEF MSWINDOWS}
 if (DLLDir <> '') and (not SetDllDirectory( PChar( DLLDir))) then
   begin
   Err := erSetDLLDirectory;
@@ -2173,6 +2189,7 @@ if (Err in [erVersionTooLow, erSignatureAbsent]) and (Handle <> 0) then
   FreeLibrary( Handle);
   Handle := 0
   end;
+{$ENDIF}
 end;
 
 procedure TOpenSSL_Signatory.StoreKeysToStream(

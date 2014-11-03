@@ -78,6 +78,7 @@ contains
   TPLB3.XXTEA in '..\..\run\TPLB3.XXTEA.pas',
   TPLB3.SHA2 in '..\..\run\TPLB3.SHA2.pas',
   TPLB3.SVN_Keywords in '..\..\run\TPLB3.SVN_Keywords.pas',
-  TPLB3.OpenSSL in '..\..\run\TPLB3.OpenSSL.pas';
+  TPLB3.OpenSSL in '..\..\run\TPLB3.OpenSSL.pas',
+  TPLB3.Compatibility in '..\..\run\TPLB3.Compatibility.pas';
 
 end.

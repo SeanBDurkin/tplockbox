@@ -1,11 +1,13 @@
+{$I TPLB3.Common.inc}
+
 unit TPLB3.SVN_Keywords;
 interface
 const
-  TPLB3Runtime_SVN_Keyword_Date    : UTF8String = '$Date: ? $';
-  TPLB3Runtime_SVN_Keyword_Revision: UTF8String = '$Revision: ? $';
-  TPLB3Runtime_SVN_Keyword_Author  : UTF8String = '$Author: ? $';
-  TPLB3Runtime_SVN_Keyword_HeadURL : UTF8String = '$HeadURL: ? $';
-  TPLB3Runtime_SVN_Keyword_Id      : UTF8String = '$Id: TPLB3.SVN_Keywords.pas ? ? ? $';
+  TPLB3Runtime_SVN_Keyword_Date    : string = '$Date: ? $';
+  TPLB3Runtime_SVN_Keyword_Revision: string = '$Revision: ? $';
+  TPLB3Runtime_SVN_Keyword_Author  : string = '$Author: ? $';
+  TPLB3Runtime_SVN_Keyword_HeadURL : string = '$HeadURL: ? $';
+  TPLB3Runtime_SVN_Keyword_Id      : string = '$Id: TPLB3.SVN_Keywords.pas ? ? ? $';
 
 
 function TPLB3Runtime_SVN_Revision: integer;

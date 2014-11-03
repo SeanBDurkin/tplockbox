@@ -28,6 +28,8 @@ and earlier was TurboPower Software.
 
  * ***** END LICENSE BLOCK ***** *}
 
+{$I TPLB3.Common.inc}
+
 unit TPLB3.Base64;
 interface
 uses Classes, TPLB3.StreamCipher;
@@ -65,7 +67,7 @@ implementation
 
 
 
-uses TPLB3.CipherUtils, TPLB3.StreamUtils, TPLB3.PointerArithmetic,
+uses SysUtils, TPLB3.CipherUtils, TPLB3.StreamUtils, TPLB3.PointerArithmetic,
      TPLB3.Constants, TPLB3.I18n;
 
 { TBase64Converter }
@@ -191,7 +193,7 @@ var
   Space: integer;
   Amnt: integer;
   isLast: boolean;
-  base64_Fragment: utf8string;
+  base64_Fragment: string;
 begin
 if FInBufferLen = 0 then
   FInBuffer.Size := ToBase64_BufferSize; // It can be any size, as long as it is a multiple of 3.
@@ -205,7 +207,7 @@ repeat
   if Space <= 0 then
     begin // We have full buffer, aligned to 3-byte.
     base64_Fragment := Stream_to_Base64( FInBuffer);
-    utf8string_to_stream( base64_Fragment, FOutStream);
+    String_to_stream( base64_Fragment, FOutStream{$IFDEF UNICODE}, TEncoding.UTF8{$ENDIF});
     FInBufferLen := 0
     end
 until isLast
@@ -215,13 +217,13 @@ end;
 
 procedure TBase64Conv.End_Encrypt;
 var
-  base64_Fragment: utf8string;
+  base64_Fragment: string;
 begin
 if FInBufferLen > 0 then
   begin
   FInBuffer.Size := FInBufferLen;
   base64_Fragment := Stream_to_Base64( FInBuffer);
-  utf8string_to_stream( base64_Fragment, FOutStream);
+  String_to_stream( base64_Fragment, FOutStream{$IFDEF UNICODE}, TEncoding.UTF8{$ENDIF});
   FInBufferLen := 0
   end
 end;
@@ -232,7 +234,7 @@ var
   Space: integer;
   Amnt: integer;
   isLast: boolean;
-  base64_Fragment: utf8string;
+  base64_Fragment: string;
 begin
 if FInBufferLen = 0 then
   FInBuffer.Size := FromBase64_BufferSize; // It can be any size, as long as it is a multiple of 4.
@@ -245,9 +247,8 @@ repeat
   Dec( Space, Amnt);
   if Space <= 0 then
     begin // We have full buffer, aligned to 4-ansichar.
-    SetLength( base64_Fragment, FromBase64_BufferSize);
     FInBuffer.Position := 0;
-    FInBuffer.Read( base64_Fragment[1], FromBase64_BufferSize);
+    base64_Fragment := Stream_to_string( FInBuffer{$IFDEF UNICODE}, TEncoding.UTF8{$ENDIF}, FromBase64_BufferSize);
     Base64_to_stream( base64_Fragment, FOutStream);
     FInBufferLen := 0
     end
@@ -258,13 +259,12 @@ end;
 
 procedure TBase64Conv.End_Decrypt;
 var
-  base64_Fragment: utf8string;
+  base64_Fragment: string;
 begin
 if FInBufferLen > 0 then
   begin
-  SetLength( base64_Fragment, FInBufferLen);
   FInBuffer.Position := 0;
-  FInBuffer.Read( base64_Fragment[1], FInBufferLen);
+  base64_Fragment := Stream_to_string( FInBuffer{$IFDEF UNICODE}, TEncoding.UTF8{$ENDIF}, FInBufferLen);
   Base64_to_stream( base64_Fragment, FOutStream);
   FInBufferLen := 0
   end
