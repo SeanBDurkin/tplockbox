@@ -82,8 +82,14 @@ procedure Base64_to_stream( const Base64: string; Destin: TStream);
 procedure CustomBase64_to_stream( const Base64: string; Destin: TStream;
   const InverseTransform: TInverseBaseTransform);
 
+/// <param name="Source">
+///  On entry, Source position is reset to zero.
+/// </param>
 function  Stream_to_string( Source: TStream{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF}): string; overload;
 function  Stream_to_string( Source: TStream{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF}; Count: Longint): string; overload;
+/// <param name="Destin">
+///  Destin is NOT repositioned. The write occurs at the point of the entry Destin.Position
+/// </param>
 procedure String_to_stream( const Value: string; Destin: TStream{$IFDEF UNICODE}; Encoding: TEncoding{$ENDIF}); overload;
 {$IFDEF UNICODE}
 function  Stream_to_utf8string( Source: TStream): string; deprecated;
@@ -397,6 +403,7 @@ if Count <> 0 then
   begin
   {$IFDEF UNICODE}
   SetLength( SourceBytes, Count);
+  Source.Position := 0;
   Source.ReadBuffer( SourceBytes[0], Count);
   result := Encoding.GetString( SourceBytes);
   {$ELSE}
