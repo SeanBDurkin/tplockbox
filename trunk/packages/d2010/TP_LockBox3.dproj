@@ -98,6 +98,7 @@
 			<DCCReference Include="..\..\run\TPLB3.SHA2.pas"/>
 			<DCCReference Include="..\..\run\TPLB3.SVN_Keywords.pas"/>
 			<DCCReference Include="..\..\run\TPLB3.OpenSSL.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.Compatibility.pas"/>
 			<BuildConfiguration Include="Base">
 				<Key>Base</Key>
 			</BuildConfiguration>
