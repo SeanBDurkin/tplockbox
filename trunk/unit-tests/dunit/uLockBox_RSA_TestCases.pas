@@ -498,14 +498,14 @@ end;
 
 procedure TRSA_Crypto_TestCase.Test_Encrypt;
 const
-  sTestPlaintext: utf8string = 'Test me!';
+  sTestPlaintext: string = 'Test me!';
 var
-  x, y, recon_x: utf8string;
+  x, y, recon_x: string;
 begin
 x := sTestPlaintext;
-Codec.Encryptutf8string( x, y);
+Codec.EncryptString( x, y, TEncoding.UTF8);
 Codec.Reset;
-Codec.Decryptutf8string( recon_x, y);
+Codec.DecryptString( recon_x, y, TEncoding.UTF8);
 Check( x = recon_x, 'RSA Crypto');
 end;
 
