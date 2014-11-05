@@ -381,13 +381,13 @@ var
 begin
 for ch := Low( Inverse_Base64Chars) to High( Inverse_Base64Chars) do
   Inverse_Base64Chars[ ch] := 255;
-{$IFDEF STRINGHELPER}
-for j := Low( Base64Chars) to High( Base64Chars) do
-{$ELSE}
 for j := 1 to Length( Base64Chars) do
-{$ENDIF}
   begin
-  ch := Ord( Base64Chars{$IFDEF STRINGHELPER}.Chars{$ENDIF}[ j]);
+  {$IFDEF STRINGHELPER}
+  ch := Ord( Base64Chars.Chars[ j - 1]);
+  {$ELSE}
+  ch := Ord( Base64Chars[ j]);
+  {$ENDIF}
   Inverse_Base64Chars[ ch] := j
   end
 end;
@@ -401,9 +401,9 @@ var
 begin
 if Count <> 0 then
   begin
+  Source.Position := 0;
   {$IFDEF UNICODE}
   SetLength( SourceBytes, Count);
-  Source.Position := 0;
   Source.ReadBuffer( SourceBytes[0], Count);
   result := Encoding.GetString( SourceBytes);
   {$ELSE}
