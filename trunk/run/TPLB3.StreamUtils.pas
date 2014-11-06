@@ -388,7 +388,7 @@ for j := 1 to Length( Base64Chars) do
   {$ELSE}
   ch := Ord( Base64Chars[ j]);
   {$ENDIF}
-  Inverse_Base64Chars[ ch] := j
+  Inverse_Base64Chars[ ch] := j - 1
   end
 end;
 
