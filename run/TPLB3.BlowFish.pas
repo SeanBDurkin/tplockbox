@@ -636,61 +636,56 @@ result := 'EE69A226ED1C0939'
 end;
 
 
-function AnsiToBigEndienHex( const StraightAnsiValue: string): string;
+function NibbleToChar( Ch: byte): Char;
+begin
+if Ch <= 9 then
+    result := Char( Ch      + Ord( '0'))
+  else
+    result := Char( Ch - 10 + Ord( 'A'))
+end;
+
+
+function BytesToBigEndienHex( const Value: TBytes): string;
 var
   L, i: integer;
   C: byte;
-  {$IFDEF STRINGHELPER}Output: TStringBuilder;{$ENDIF}
-
-  function NibbleToChar( Ch: byte): Char;
-  begin
-  if Ch <= 9 then
-      result := Chr( Ch      + Ord( '0'))
-    else
-      result := Chr( Ch - 10 + Ord( 'A'))
-  end;
-
 begin
-L := Length( StraightAnsiValue);
-{$IFDEF STRINGHELPER}
-Output := TStringBuilder.Create;
-{$ELSE}
+L := Length( Value);
 SetLength( result, 2 * L);
-{$ENDIF}
-for i := 0 to L - 1 do
+for i := 1 to L do
   begin
-  {$IFDEF STRINGHELPER}
-  C := Ord( StraightAnsiValue.Chars[i]);
-  Output.Append(NibbleToChar( C shr 4));
-  Output.Append(NibbleToChar( C and $0F));
-  {$ELSE}
-  C := Ord( StraightAnsiValue[i + 1]);
-  result[i*2 + 1] := NibbleToChar( C shr 4);
-  result[i*2 + 2] := NibbleToChar( C and $0F);
-  {$ENDIF}
-  end;
-{$IFDEF STRINGHELPER}
-result := Output.ToString;
-Output.Free;
-{$ENDIF}
+  C := Ord( Value[i-1]);
+  result[i*2 - 1] := NibbleToChar( C shr 4);
+  result[i*2    ] := NibbleToChar( C and $0F)
+  end
 end;
 
+
+function Utf8ToBigEndienHex( const Value {read as utf8}: string): string;
+begin
+result := BytesToBigEndienHex( TEncoding.UTF8.GetBytes( Value))
+end;
 
 
 function TBlowFish.SelfTest_Key: string;
 // From http://webnet77.com/cgi-bin/helpers/blowfish.pl
 var
-  KeyAsString, s: string;
+  KeyAsString: string;
   BlowfishKey: TBlowfishKey;
   Temp: TMemoryStream;
+  L: integer;
+  Bytes: TBytes;
 
 begin
-// 1. Start with string 'abcdefgh'
+// 1. Start with utf8string 'abcdefgh'
 KeyAsString := 'abcdefgh';
 
 // 2. Make a Blowfish key
+Bytes := TEncoding.UTF8.GetBytes( KeyAsString);
+L := Length( Bytes);
 Temp := TMemoryStream.Create;
-String_to_stream( KeyAsString, Temp{$IFDEF UNICODE}, TEncoding.ASCII{$ENDIF});
+Temp.Size := L;
+Move( Bytes[0], Temp.Memory^, L);
 Temp.Position := 0;
 BlowfishKey := TBlowfishKey.GenerateFromSeed( Temp);
 
@@ -698,9 +693,11 @@ BlowfishKey := TBlowfishKey.GenerateFromSeed( Temp);
 Temp.Size := 0;
 BlowfishKey.SaveToStream( Temp);
 
-// 4. Convert to bigendien hexidecimal encoded string.
-s := Stream_to_string( Temp{$IFDEF UNICODE}, TEncoding.ASCII{$ENDIF});
-result := AnsiToBigEndienHex( s);
+// 4. Convert to bigendien hexidecimal encoded utf8string.
+L := Temp.Size;
+SetLength( Bytes, L);
+Move( Temp.Memory^, Bytes[0], L);
+result := BytesToBigEndienHex( Bytes);
 
 // 5. Clean up.
 Temp.Free;
@@ -712,7 +709,7 @@ end;
 function TBlowFish.SelfTest_Plaintext: string;
 // From http://webnet77.com/cgi-bin/helpers/blowfish.pl
 begin
-result := AnsiToBigEndienHex( '12345678')
+result := Utf8ToBigEndienHex( '12345678')
 end;
 
 
