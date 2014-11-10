@@ -701,7 +701,7 @@ BlowfishKey.SaveToStream( Temp);
 L := Temp.Size;
 SetLength( BlowfishKeyAsBytes, L);
 Temp.Position := 0;
-Temp.ReadBuffer(BlowfishKeyAsBytes, L);
+Temp.ReadBuffer( BlowfishKeyAsBytes[0], L);
 result := BytesToBigEndienHex( BlowfishKeyAsBytes);
 
 // 5. Clean up.
