@@ -100,6 +100,7 @@ type
     lblLogoAttribution: TLabel;
     lblWebLabel: TStaticText;
     imgSean: TImage;
+    imgNick: TImage;
     memoExtraCipherDescription: TMemo;
     memoWelcomeInstructions: TMemo;
     procedure lblTpsfaContactClick(Sender: TObject);
@@ -211,6 +212,8 @@ if SameText( Author, 'Sean B. Durkin') then
     Idx := 0
   else if SameText( Author, 'David Barton') then
     Idx := 1
+  else if SameText( Author, 'Nick Chevsky') then
+    Idx := 2
   else if SameText( Author, 'Another contributor') then
     Idx := -1
   else
@@ -230,6 +233,11 @@ case Idx of
       imgAuthorPic.Picture := nil;
       sAuthorEmail := 'crypto@cityinthesky.co.uk';
       sAuthorWeb   := ''
+      end;
+   2: begin
+      imgAuthorPic.Picture := imgNick.Picture;
+      sAuthorEmail := 'nchevsky@gmail.com';
+      sAuthorWeb   := 'http://blog.blazis.com/'
       end;
   end;
 if sAuthorEmail <> '' then
