@@ -44,7 +44,7 @@ TGenerateAsymetricKeyPairProgress = procedure (
   Sender: TObject; CountPrimalityTests: integer;
   var doAbort: boolean) of object;
 
-
+{$M-}
 ICodec = interface
 {$IFDEF UNICODE}
   ['{48B3116A-5681-4E79-9013-8EC89BAC5B35}']

@@ -41,6 +41,7 @@ type
 TOnHashProgress = function( Sender: TObject;
                       CountBytesProcessed: int64): boolean of object;
 
+{$M-}
 IHash = interface
   ['{97CF303A-B823-42F3-98F6-7022015FDCB5}']
     function  GetIsHashing: boolean;
