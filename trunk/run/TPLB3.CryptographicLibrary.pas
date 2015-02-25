@@ -91,6 +91,7 @@ ICryptographicLibraryWatcher = interface
   procedure ProgIdsChanged;
   end;
 
+[ComponentPlatformsAttribute( pidWin32 or pidWin64 or pidAndroid)]
 TCryptographicLibrary = class( TTPLb_BaseNonVisualComponent)
   private
     FStreamCiphers: IInterfaceList; // of IStreamCipher

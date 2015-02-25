@@ -177,6 +177,7 @@ ICodec_TestAccess = interface
   end;
 
 
+[ComponentPlatformsAttribute( pidWin32 or pidWin64 or pidAndroid)]
 TCodec = class( TTPLb_BaseNonVisualComponent, ICryptographicLibraryWatcher,
                  ICodec_TestAccess)
 {$IF CompilerVersion >= 17.0}
