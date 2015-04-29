@@ -38,6 +38,9 @@ uses Classes, SysUtils, TPLB3.StreamCipher, TPLB3.BlockCipher, TPLB3.Asymetric,
 
 
 type
+/// <remarks>
+///  Please remember to invoke TRandomStream.Instance.Randomize() at program start-up!
+/// </remarks>
 TSimpleCodec = class( TInterfacedPersistent, ICodec, IBlockCipherSelector,
     IBlockCipherSelectorEx2, IEventOrigin, ICodec_WithAsymetricSupport)
   private
@@ -177,6 +180,9 @@ ICodec_TestAccess = interface
   end;
 
 
+/// <remarks>
+///  Please remember to invoke TRandomStream.Instance.Randomize() at program start-up!
+/// </remarks>
 [ComponentPlatformsAttribute( pidWin32 or pidWin64 or pidAndroid)]
 TCodec = class( TTPLb_BaseNonVisualComponent, ICryptographicLibraryWatcher,
                  ICodec_TestAccess)

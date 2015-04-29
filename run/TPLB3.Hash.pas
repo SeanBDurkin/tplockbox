@@ -381,7 +381,13 @@ if Plaintext <> '' then
   PlaintextBytes := Encoding.GetBytes( Plaintext);
   HashBytes( PlaintextBytes)
   {$ELSE}
-  UpdateMemory( Plaintext[1], Length( Plaintext) * SizeOf( Char))
+  Begin_Hash;
+  try
+    // STRINGHELPER not defined if UNICODE is undefined.
+    UpdateMemory( Plaintext[ 1], Length( Plaintext) * SizeOf( Char))
+  finally
+    End_Hash
+    end
   {$ENDIF}
   end;
 end;
