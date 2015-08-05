@@ -1391,7 +1391,7 @@ end;
 
 procedure TmfmLockbox3_Demo.btnComputeHashClick( Sender: TObject );
 var
-  a: ansistring;
+  a: string;
   s: string;
   HashWord: uint32;
   Xfer: Integer;
@@ -1399,9 +1399,9 @@ begin
   if rgHashSource.ItemIndex <= 0 then
   begin
     a := edtHashSource.Text;
-    StringHash.HashAnsiString( a );
+    StringHash.HashString( a, TEncoding.UTF8);
     LogFmt
-      ( 'SHA-384 of ansistring ''%s'' rendered in little-endien base64 is:',
+      ( 'SHA-384 of utf-8 string ''%s'' rendered in little-endien base64 is:',
       [a] )
   end
   else

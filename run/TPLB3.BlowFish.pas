@@ -710,14 +710,22 @@ BlowfishKey.Free
 end;
 
 
-
+// For SelfTest_Plaintext(), the non-unison part was contributed by merijnb on Tue 28 of Apr, 2015
+//  Refer http://lockbox.seanbdurkin.id.au/tiki-view_forum_thread.php?comments_parentId=525&topics_offset=1
 function TBlowFish.SelfTest_Plaintext: string;
 // From http://webnet77.com/cgi-bin/helpers/blowfish.pl
+
+ {$IFNDEF UNICODE}
+ function GetBytes(st: ansistring): TBytes;
+ begin
+  SetLength(result, Length(st));
+  Move(st[1], result, Length(st));
+ end;
+ {$ENDIF}
+
 begin
-result := BytesToBigEndienHex( TEncoding.UTF8.GetBytes( '12345678'))
+result := BytesToBigEndienHex( {$IFDEF UNICODE}TEncoding.UTF8.{$ENDIF}GetBytes( '12345678'))
 end;
-
-
 
 function TBlowFish.WikipediaReference: string;
 begin

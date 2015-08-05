@@ -35,16 +35,12 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     Top = 0
     Width = 520
     Height = 569
-    ActivePage = tbSymetric
+    ActivePage = tbSignature
     Align = alClient
     MultiLine = True
     TabOrder = 1
     object tbSymetric: TTabSheet
       Caption = '1. Symetric basics'
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -235,10 +231,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbSeeding: TTabSheet
       Caption = '2. Seeding'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object bvlScriblePad: TBevel
         Left = 4
         Top = 342
@@ -361,10 +353,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbSymetricExtent: TTabSheet
       Caption = '3. Symetric extensions'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -573,10 +561,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbKeyGen: TTabSheet
       Caption = '4. RSA - Key generation and storage'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -669,10 +653,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbSignature: TTabSheet
       Caption = '5. RSA - Signature && Verification'
       ImageIndex = 4
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -879,10 +859,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbHashes: TTabSheet
       Caption = '6. Hashes'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -967,10 +943,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbOpenSSL: TTabSheet
       Caption = '7. RSA via OpenSSL'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -1465,7 +1437,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     Left = 576
     Top = 88
     Bitmap = {
-      494C010103000A00040010001000FFFFFFFFFF00FFFFFFFFFFFFFFFF424D3600
+      494C010103000A000C0010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000
@@ -1601,7 +1573,8 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       001FE00F001F0000000FE00F000F00000007E007000700000003E00700030000
       0001E007000100000000800300000000001F0000001F0000001F0000001F0000
       001F0000001F00008FF100018FF10000FFF98001FFF90000FF75C003FF750000
-      FF8FC007FF8F0000FFFFFF9FFFFF0000}
+      FF8FC007FF8F0000FFFFFF9FFFFF000000000000000000000000000000000000
+      000000000000}
   end
   object CryptographicLibrary1: TCryptographicLibrary
     Left = 592

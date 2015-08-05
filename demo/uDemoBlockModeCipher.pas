@@ -1,6 +1,6 @@
 unit uDemoBlockModeCipher;
 interface
-uses Classes, TPLB3.StreamCipher, TPLB3.BlockCipher,
+uses Classes, TPLB3.StreamCipher, TPLB3.BlockCipher, SysUtils,
      TPLB3.SimpleBlockCipher, TPLB3.CryptographicLibrary;
 
 const
@@ -12,9 +12,9 @@ type
 TDemoBlockModeCipher = class( TSimpleBlockCipher)
   protected
     function  Encrypt(
-      const Buffer: RawByteString;
+      const Buffer: TBytes;
       Key: TSimpleBlockCipherKey;
-      doEncrypt: boolean): RawByteString; override;
+      doEncrypt: boolean): TBytes; override;
 
   public
     class procedure SelfRegister( Lib: TCryptographicLibrary);
@@ -35,14 +35,14 @@ implementation
 { TDemoBlockModeCipher }
 
 function TDemoBlockModeCipher.Encrypt(
-  const Buffer: RawByteString;
-  Key: TSimpleBlockCipherKey; doEncrypt: boolean): RawByteString;
+  const Buffer: TBytes;
+  Key: TSimpleBlockCipherKey; doEncrypt: boolean): TBytes;
 var
   j: integer;
 begin
 SetLength( result, DemoBlockSize);
-for j := 1 to DemoBlockSize do
-  result[ j] := ansichar( byte( Buffer[ j]) xor byte( Key.FKeyData[ j]))
+for j := 0 to DemoBlockSize - 1 do
+  result[ j] := byte( Buffer[ j]) xor byte( Key.FKeyData[ j])
 end;
 
 

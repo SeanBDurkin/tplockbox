@@ -2,8 +2,8 @@ program Lockbox3_Demo;
 
 uses
   Forms,
-  uDemoBlockModeCipher in '..\..\demo\uDemoBlockModeCipher.pas',
-  umfmLockbox3_Demo in '..\..\demo\D2010+\umfmLockbox3_Demo.pas' {mfmLockbox3_Demo};
+  umfmLockbox3_Demo in '..\..\demo\D2010+\umfmLockbox3_Demo.pas' {mfmLockbox3_Demo},
+  uDemoBlockModeCipher in '..\..\demo\uDemoBlockModeCipher.pas';
 
 {$R *.res}
 
