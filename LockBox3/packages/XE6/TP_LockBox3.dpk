@@ -1,0 +1,88 @@
+package TP_LockBox3;
+
+{$R *.res}
+{$IFDEF IMPLICITBUILDING This IFDEF should not be used by users}
+{$ALIGN 8}
+{$ASSERTIONS ON}
+{$BOOLEVAL OFF}
+{$DEBUGINFO OFF}
+{$EXTENDEDSYNTAX ON}
+{$IMPORTEDDATA ON}
+{$IOCHECKS ON}
+{$LOCALSYMBOLS ON}
+{$LONGSTRINGS ON}
+{$OPENSTRINGS ON}
+{$OPTIMIZATION OFF}
+{$OVERFLOWCHECKS OFF}
+{$RANGECHECKS OFF}
+{$REFERENCEINFO ON}
+{$SAFEDIVIDE OFF}
+{$STACKFRAMES ON}
+{$TYPEDADDRESS OFF}
+{$VARSTRINGCHECKS ON}
+{$WRITEABLECONST OFF}
+{$MINENUMSIZE 1}
+{$IMAGEBASE $400000}
+{$DEFINE DEBUG}
+{$ENDIF IMPLICITBUILDING}
+{$DESCRIPTION 'TurboPower LockBox 3 run-time package'}
+{$LIBSUFFIX '_XE6'}
+{$RUNONLY}
+{$IMPLICITBUILD OFF}
+
+requires
+  rtl,
+  vcl,
+  vclimg,
+  dbrtl;
+
+contains
+  TPLB3.BlockCipher in '..\..\run\TPLB3.BlockCipher.pas',
+  TPLB3.StreamUtils in '..\..\run\TPLB3.StreamUtils.pas',
+  TPLB3.StreamCipher in '..\..\run\TPLB3.StreamCipher.pas',
+  TPLB3.CryptographicLibrary in '..\..\run\TPLB3.CryptographicLibrary.pas',
+  TPLB3.BaseNonVisualComponent in '..\..\run\TPLB3.BaseNonVisualComponent.pas',
+  TPLB3.Codec in '..\..\run\TPLB3.Codec.pas',
+  TPLB3.ECB in '..\..\run\TPLB3.ECB.pas',
+  TPLB3.CBC in '..\..\run\TPLB3.CBC.pas',
+  TPLB3.PCBC in '..\..\run\TPLB3.PCBC.pas',
+  TPLB3.CFB_Block in '..\..\run\TPLB3.CFB_Block.pas',
+  TPLB3.CFB_8Bit in '..\..\run\TPLB3.CFB_8Bit.pas',
+  TPLB3.OFB in '..\..\run\TPLB3.OFB.pas',
+  TPLB3.CTR in '..\..\run\TPLB3.CTR.pas',
+  TPLB3.HashDsc in '..\..\run\TPLB3.HashDsc.pas',
+  TPLB3.SHA1 in '..\..\run\TPLB3.SHA1.pas',
+  TPLB3.BinaryUtils in '..\..\run\TPLB3.BinaryUtils.pas',
+  TPLB3.Hash in '..\..\run\TPLB3.Hash.pas',
+  TPLB3.MD5 in '..\..\run\TPLB3.MD5.pas',
+  TPLB3.Random in '..\..\run\TPLB3.Random.pas',
+  TPLB3.StreamToBlock in '..\..\run\TPLB3.StreamToBlock.pas',
+  TPLB3.Base64 in '..\..\run\TPLB3.Base64.pas',
+  TPLB3.CipherUtils in '..\..\run\TPLB3.CipherUtils.pas',
+  TPLB3.AES in '..\..\run\TPLB3.AES.pas',
+  TPLB3.PointerArithmetic in '..\..\run\TPLB3.PointerArithmetic.pas',
+  TPLB3.HugeCardinal in '..\..\run\TPLB3.HugeCardinal.pas',
+  TPLB3.IntegerUtils in '..\..\run\TPLB3.IntegerUtils.pas',
+  TPLB3.HugeCardinalUtils in '..\..\run\TPLB3.HugeCardinalUtils.pas',
+  TPLB3.MemoryStreamPool in '..\..\run\TPLB3.MemoryStreamPool.pas',
+  TPLB3.RSA_Primitives in '..\..\run\TPLB3.RSA_Primitives.pas',
+  TPLB3.RSA_Engine in '..\..\run\TPLB3.RSA_Engine.pas',
+  TPLB3.Asymetric in '..\..\run\TPLB3.Asymetric.pas',
+  TPLB3.Signatory in '..\..\run\TPLB3.Signatory.pas',
+  TPLB3.CodecIntf in '..\..\run\TPLB3.CodecIntf.pas',
+  TPLB3.Constants in '..\..\run\TPLB3.Constants.pas',
+  TPLB3.I18n in '..\..\run\TPLB3.I18n.pas',
+  TPLB3.SimpleBlockCipher in '..\..\run\TPLB3.SimpleBlockCipher.pas',
+  TPLB3.DES in '..\..\run\TPLB3.DES.pas',
+  TPLB3.TDES in '..\..\run\TPLB3.TDES.pas',
+  TPLB3.BlowFish in '..\..\run\TPLB3.BlowFish.pas',
+  TPLB3.Decorators in '..\..\run\TPLB3.Decorators.pas',
+  TPLB3.DCP.twofish_Modified in '..\..\run\TPLB3.DCP.twofish_Modified.pas',
+  TPLB3.TwoFish in '..\..\run\TPLB3.TwoFish.pas',
+  TPLB3.XXTEA in '..\..\run\TPLB3.XXTEA.pas',
+  TPLB3.SHA2 in '..\..\run\TPLB3.SHA2.pas',
+  TPLB3.SVN_Keywords in '..\..\run\TPLB3.SVN_Keywords.pas',
+  TPLB3.OpenSSL in '..\..\run\TPLB3.OpenSSL.pas',
+  TPLB3.Compatibility in '..\..\run\TPLB3.Compatibility.pas';
+
+end.

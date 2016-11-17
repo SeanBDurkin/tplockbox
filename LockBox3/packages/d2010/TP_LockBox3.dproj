@@ -1,0 +1,163 @@
+﻿	<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+		<PropertyGroup>
+			<ProjectGuid>{5AED2ED1-3EFC-4CE2-BAC2-D04B331DE465}</ProjectGuid>
+			<MainSource>TP_LockBox3.dpk</MainSource>
+			<Config Condition="'$(Config)'==''">Debug</Config>
+			<DCC_DCCCompiler>DCC32</DCC_DCCCompiler>
+			<ProjectVersion>12.0</ProjectVersion>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Base' or '$(Base)'!=''">
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Release' or '$(Cfg_1)'!=''">
+			<Cfg_1>true</Cfg_1>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Config)'=='Debug' or '$(Cfg_2)'!=''">
+			<Cfg_2>true</Cfg_2>
+			<CfgParent>Base</CfgParent>
+			<Base>true</Base>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Base)'!=''">
+			<RuntimeOnlyPackage>true</RuntimeOnlyPackage>
+			<DCC_DependencyCheckOutputName>C:\Documents and Settings\All Users\Documents\RAD Studio\7.0\Bpl\TP_LockBox3_D2010.bpl</DCC_DependencyCheckOutputName>
+			<DesignOnlyPackage>false</DesignOnlyPackage>
+			<DCC_UnitAlias>WinTypes=Windows;WinProcs=Windows;$(DCC_UnitAlias)</DCC_UnitAlias>
+			<DCC_Optimize>false</DCC_Optimize>
+			<DCC_Description>TurboPower LockBox 3 run-time package</DCC_Description>
+			<GenPackage>true</GenPackage>
+			<DCC_OutputNeverBuildDcps>true</DCC_OutputNeverBuildDcps>
+			<GenDll>true</GenDll>
+			<DllSuffix>_D2010</DllSuffix>
+			<DCC_SymbolReferenceInfo>1</DCC_SymbolReferenceInfo>
+			<DCC_DcuOutput>..\..\work-products\ephemeral\dcu\D2010\Win32</DCC_DcuOutput>
+			<DCC_Platform>x86</DCC_Platform>
+			<DCC_ImageBase>00400000</DCC_ImageBase>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_1)'!=''">
+			<DCC_LocalDebugSymbols>false</DCC_LocalDebugSymbols>
+			<DCC_Define>RELEASE;$(DCC_Define)</DCC_Define>
+			<DCC_SymbolReferenceInfo>0</DCC_SymbolReferenceInfo>
+			<DCC_DebugInformation>false</DCC_DebugInformation>
+		</PropertyGroup>
+		<PropertyGroup Condition="'$(Cfg_2)'!=''">
+			<DCC_Define>DEBUG;$(DCC_Define)</DCC_Define>
+		</PropertyGroup>
+		<ItemGroup>
+			<DelphiCompile Include="TP_LockBox3.dpk">
+				<MainSource>MainSource</MainSource>
+			</DelphiCompile>
+			<DCCReference Include="rtl.dcp"/>
+			<DCCReference Include="vcl.dcp"/>
+			<DCCReference Include="vclimg.dcp"/>
+			<DCCReference Include="dbrtl.dcp"/>
+			<DCCReference Include="..\..\run\TPLB3.BlockCipher.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.StreamUtils.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.StreamCipher.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.CryptographicLibrary.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.BaseNonVisualComponent.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.Codec.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.ECB.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.CBC.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.PCBC.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.CFB_Block.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.CFB_8Bit.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.OFB.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.CTR.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.HashDsc.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.SHA1.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.BinaryUtils.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.Hash.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.MD5.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.Random.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.StreamToBlock.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.Base64.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.CipherUtils.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.AES.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.PointerArithmetic.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.HugeCardinal.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.IntegerUtils.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.HugeCardinalUtils.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.MemoryStreamPool.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.RSA_Primitives.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.RSA_Engine.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.Asymetric.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.Signatory.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.CodecIntf.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.Constants.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.I18n.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.SimpleBlockCipher.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.DES.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.TDES.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.BlowFish.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.Decorators.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.DCP.twofish_Modified.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.TwoFish.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.XXTEA.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.SHA2.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.SVN_Keywords.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.OpenSSL.pas"/>
+			<DCCReference Include="..\..\run\TPLB3.Compatibility.pas"/>
+			<BuildConfiguration Include="Base">
+				<Key>Base</Key>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Debug">
+				<Key>Cfg_2</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+			<BuildConfiguration Include="Release">
+				<Key>Cfg_1</Key>
+				<CfgParent>Base</CfgParent>
+			</BuildConfiguration>
+		</ItemGroup>
+		<Import Project="$(BDS)\Bin\CodeGear.Delphi.Targets" Condition="Exists('$(BDS)\Bin\CodeGear.Delphi.Targets')"/>
+		<ProjectExtensions>
+			<Borland.Personality>Delphi.Personality.12</Borland.Personality>
+			<Borland.ProjectType>Package</Borland.ProjectType>
+			<BorlandProject>
+				<Delphi.Personality>
+					<Source>
+						<Source Name="MainSource">TP_LockBox3.dpk</Source>
+					</Source>
+					<Parameters>
+						<Parameters Name="UseLauncher">False</Parameters>
+						<Parameters Name="LoadAllSymbols">True</Parameters>
+						<Parameters Name="LoadUnspecifiedSymbols">False</Parameters>
+					</Parameters>
+					<VersionInfo>
+						<VersionInfo Name="IncludeVerInfo">True</VersionInfo>
+						<VersionInfo Name="AutoIncBuild">False</VersionInfo>
+						<VersionInfo Name="MajorVer">3</VersionInfo>
+						<VersionInfo Name="MinorVer">6</VersionInfo>
+						<VersionInfo Name="Release">0</VersionInfo>
+						<VersionInfo Name="Build">0</VersionInfo>
+						<VersionInfo Name="Debug">False</VersionInfo>
+						<VersionInfo Name="PreRelease">False</VersionInfo>
+						<VersionInfo Name="Special">False</VersionInfo>
+						<VersionInfo Name="Private">False</VersionInfo>
+						<VersionInfo Name="DLL">False</VersionInfo>
+						<VersionInfo Name="Locale">3081</VersionInfo>
+						<VersionInfo Name="CodePage">1252</VersionInfo>
+					</VersionInfo>
+					<VersionInfoKeys>
+						<VersionInfoKeys Name="CompanyName"/>
+						<VersionInfoKeys Name="FileDescription"/>
+						<VersionInfoKeys Name="FileVersion">3.6.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="InternalName"/>
+						<VersionInfoKeys Name="LegalCopyright"/>
+						<VersionInfoKeys Name="LegalTrademarks"/>
+						<VersionInfoKeys Name="OriginalFilename"/>
+						<VersionInfoKeys Name="ProductName"/>
+						<VersionInfoKeys Name="ProductVersion">3.6.0.0</VersionInfoKeys>
+						<VersionInfoKeys Name="Comments"/>
+					</VersionInfoKeys>
+					<Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dcloffice2k140.bpl">Microsoft Office 2000 Sample Automation Server Wrapper Components</Excluded_Packages>
+						<Excluded_Packages Name="$(BDS)\bin\dclofficexp140.bpl">Microsoft Office XP Sample Automation Server Wrapper Components</Excluded_Packages>
+					</Excluded_Packages>
+				</Delphi.Personality>
+			</BorlandProject>
+			<ProjectFileVersion>12</ProjectFileVersion>
+		</ProjectExtensions>
+	</Project>

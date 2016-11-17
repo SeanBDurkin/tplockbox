@@ -1,0 +1,47 @@
+How to Build TurboPower LockBox 3
+=================================
+
+To build TurboPower LockBox 3, follow these steps.
+
+1. Open up each of the projects and set the project options and directories
+    as you prefer for your development environment. (See notes about
+    Environment Variables below).
+
+2. Compile the main run-time package (TP_LockBox3.dproj) for each platform. Use the DEBUG config if you want to be able to step through the lockbox code at run-time, otherwise use the RELEASE config.
+    By default the dcu's will be placed in '..\..\work-products\ephemeral\dcu\XE7\$(Platform)' relative to the project head, but you can override this.
+	The default the dcp's will be placed as per your IDE settings (Tools | Options... | etc.), but you can override this.
+
+3. Take a note of the paths in step 2. Check that the output dcu's and dcp is where you expect them to be. If not already present, add the dcu path and the dcp path (but not the source path) to the
+    library path for each platform. You can also add the source path ('run' directory) to the IDE browsing path).
+	
+4. Compile the main design-time package (dclTP_LockBox3.dproj). Use Win32 platform, RELEASE config.
+   If upgrading from a previous version, it is safer to uninstall the previous lockbox design-time package first.
+
+5. Install the main design-time package.
+
+6. Use and enjoy !
+
+
+Package, Application and Group heads
+====================================
+Here is listed the package heads and their purposes.
+
+\packages\XE7\TP_LockBox3_XE7.groupproj
+   The project group for Delphi XE7
+
+\packages\XE7\dclTP_LockBox3.dpk
+   The main design-time package for Delphi XE6
+
+\packages\XE7\Lockbox3_Demo.dpr
+   The demonstration program for Delphi XE7
+
+\packages\XE7\LockBox_DUnit_Tests.dpr
+   The D-Unit test suite running under Delphi 2010 without SmartInpect support.
+
+\packages\XE7\MakeSampleKey.dpr
+   A demonstration program for Delphi 2010 without SmartInspect, to create
+   an RSA key.
+
+\packages\XE7\Precompute.dpr
+   Program which show how the AES look-up tables were precomputed.
+
