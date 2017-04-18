@@ -30,7 +30,6 @@ package dclTP_LockBox3;
 {$DESIGNONLY}
 {$IMPLICITBUILD OFF}
 
-
 requires
   rtl,
   designide,
@@ -44,5 +43,4 @@ contains
   TPLB3.ComponentAbout in '..\..\design\TPLB3.ComponentAbout.pas' {TPLb_fmComponentAbout},
   TPLB3.InfoUtils in '..\..\design\TPLB3.InfoUtils.pas';
 
-//END.?
-d.
+END.
