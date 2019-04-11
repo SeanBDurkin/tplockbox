@@ -29,7 +29,7 @@ and earlier was TurboPower Software.
  * ***** END LICENSE BLOCK ***** *}
 
 {$I TPLB3.Common.inc}
-
+{$WARN SYMBOL_DEPRECATED OFF} // Symbol ‘%s’ is deprecated
 unit TPLB3.Codec;
 interface
 uses Classes, SysUtils, TPLB3.StreamCipher, TPLB3.BlockCipher, TPLB3.Asymetric,
@@ -285,6 +285,9 @@ TCodec = class( TTPLb_BaseNonVisualComponent, ICryptographicLibraryWatcher,
     procedure DecryptMemory( const CipherText{in}; CiphertextLen: integer);
     procedure End_DecryptMemory;
 
+    function Encrypt(const ABytes : TBytes): TBytes;
+    function Decrypt(const ABytes : TBytes): TBytes;
+    procedure InitFrom(const Key; const Count: Integer);
     procedure EncryptStream( Plaintext, CipherText: TStream);
     procedure DecryptStream( Plaintext, CipherText: TStream);
 
@@ -2163,4 +2166,63 @@ begin
 Writer.WriteString( FChainId)
 end;
 
+    function TCodec.Encrypt(const ABytes: TBytes): TBytes;
+    {$REGION 'History'}
+    //  05-Apr-2019 - Created
+    {$ENDREGION}
+    var
+      bs  : TBytesStream;
+      len : integer;
+    begin
+      bs := TBytesStream.Create();
+      try
+        Begin_EncryptMemory(bs);
+        FWorkLoad := Length(ABytes);
+        EncryptMemory(ABytes[0], FWorkLoad);
+        End_EncryptMemory;
+        Len := bs.Position;   // Save
+        Result := bs.Bytes;   // New Reference
+      finally
+        bs.Free;
+      end;
+      SetLength(Result, Len); // Size only remaining Reference
+    end;
+
+    function TCodec.Decrypt(const ABytes: TBytes): TBytes;
+    {$REGION 'History'}
+    //  05-Apr-2019 - Created
+    {$ENDREGION}
+    var
+      bs  : TBytesStream;
+      len : integer;
+    begin
+      bs := TBytesStream.Create();
+      try
+        Begin_DecryptMemory(bs);
+        FWorkLoad := Length(ABytes);
+        DecryptMemory(ABytes[0], FWorkLoad);
+        End_DecryptMemory;
+        Len := bs.Position;   // Save
+        Result := bs.Bytes;   // New Reference
+      finally
+        bs.Free;
+      end;
+      SetLength(Result, Len); // Size only remaining Reference
+    end;
+
+    procedure TCodec.InitFrom(const Key; const Count: Integer);
+    {$REGION 'History'}
+    //  05-Apr-2019 - Created
+    {$ENDREGION}
+    var Store: TMemoryStream;
+    begin
+      Store:= TMemoryStream.Create();
+      try
+        Store.Write(Key, Count);
+        Store.Position := 0;
+        InitFromStream(Store);
+      finally
+        Store.Free;
+      end;
+    end;
 end.

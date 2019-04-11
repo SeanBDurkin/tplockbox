@@ -231,10 +231,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbSeeding: TTabSheet
       Caption = '2. Seeding'
       ImageIndex = 1
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       object bvlScriblePad: TBevel
         Left = 4
         Top = 342
@@ -357,10 +353,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbSymetricExtent: TTabSheet
       Caption = '3. Symetric extensions'
       ImageIndex = 2
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -569,10 +561,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbKeyGen: TTabSheet
       Caption = '4. RSA - Key generation and storage'
       ImageIndex = 3
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -601,14 +589,14 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
       end
       object btnRSAGen: TButton
         Left = 3
-        Top = 32
+        Top = 33
         Width = 174
         Height = 25
         Action = actRSAGen
         TabOrder = 0
       end
       object btnAbortGen: TButton
-        Left = 224
+        Left = 304
         Top = 32
         Width = 129
         Height = 25
@@ -660,6 +648,48 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
         Height = 25
         Action = actLoadPublicKey
         TabOrder = 6
+      end
+      object edtKeyBase64: TMemo
+        Left = 296
+        Top = 208
+        Width = 213
+        Height = 185
+        Lines.Strings = (
+          '<paste Base64 Public Key>')
+        TabOrder = 7
+      end
+      object btLoadPublicBase64Key: TButton
+        Left = 297
+        Top = 177
+        Width = 136
+        Height = 25
+        Caption = 'Load Public Base64 Key'
+        TabOrder = 8
+        OnClick = btLoadPublicBase64KeyClick
+      end
+      object btBurnAll: TButton
+        Left = 41
+        Top = 206
+        Width = 136
+        Height = 25
+        Caption = 'Burn All'
+        TabOrder = 10
+        OnClick = btBurnAllClick
+      end
+      object cbRSAKeySize: TComboBox
+        Left = 183
+        Top = 34
+        Width = 60
+        Height = 21
+        Style = csDropDownList
+        ItemIndex = 2
+        TabOrder = 9
+        Text = '2048'
+        Items.Strings = (
+          '512'
+          '1024'
+          '2048'
+          '4096')
       end
     end
     object tbSignature: TTabSheet
@@ -871,10 +901,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbHashes: TTabSheet
       Caption = '6. Hashes'
       ImageIndex = 5
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -959,10 +985,6 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     object tbOpenSSL: TTabSheet
       Caption = '7. RSA via OpenSSL'
       ImageIndex = 6
-      ExplicitLeft = 0
-      ExplicitTop = 0
-      ExplicitWidth = 0
-      ExplicitHeight = 0
       DesignSize = (
         512
         523)
@@ -1040,19 +1062,20 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
         Width = 205
         Height = 25
         Action = actOpenSSLGenKey
+        Caption = 'Generate a key pair'
         TabOrder = 3
       end
       object btnOpenSSLLoadPrivateKey: TButton
-        Left = 239
-        Top = 176
+        Left = 3
+        Top = 213
         Width = 107
         Height = 25
         Action = actOpenSSLLoadPrivateKey
         TabOrder = 4
       end
       object btnOpenSSLLoadPublicKey: TButton
-        Left = 376
-        Top = 176
+        Left = 116
+        Top = 213
         Width = 121
         Height = 25
         Action = actOpenSSLLoadPublicKey
@@ -1194,10 +1217,26 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
         ParentFont = False
         TabOrder = 16
       end
+      object cbOSSLKeySize: TComboBox
+        Left = 214
+        Top = 177
+        Width = 60
+        Height = 21
+        Style = csDropDownList
+        ItemIndex = 2
+        TabOrder = 17
+        Text = '2048'
+        Items.Strings = (
+          '512'
+          '1024'
+          '2048'
+          '4096')
+      end
     end
   end
   object actmngrMainDemoActions: TActionManager
     Images = imglstActionGlyphs_16x16
+    OnUpdate = actmngrMainDemoActionsUpdate
     Left = 576
     Top = 32
     StyleName = 'Platform Default'
@@ -1298,7 +1337,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     end
     object actRSAGen: TAction
       Category = 'RSA Generation'
-      Caption = 'Generate 1024 bit RSA keys'
+      Caption = 'Generate RSA keys'
       OnExecute = actRSAGenExecute
       OnUpdate = actRSAGenUpdate
     end
@@ -1457,7 +1496,7 @@ object mfmLockbox3_Demo: TmfmLockbox3_Demo
     Left = 576
     Top = 88
     Bitmap = {
-      494C010103000A00100010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
+      494C010103000500040010001000FFFFFFFFFF10FFFFFFFFFFFFFFFF424D3600
       0000000000003600000028000000400000001000000001002000000000000010
       0000000000000000000000000000000000000000000000000000000000000000
       0000000000000000000000000000000000000000000000000000000000000000

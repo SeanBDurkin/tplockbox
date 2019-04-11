@@ -26,7 +26,7 @@ package dclTP_LockBox3;
 {$DEFINE DEBUG}
 {$ENDIF IMPLICITBUILDING}
 {$DESCRIPTION 'TurboPower LockBox 3 design-time package'}
-{$LIBSUFFIX '_D10_1Brln'}
+{$LIBSUFFIX '_D10_2Tokyo'}
 {$DESIGNONLY}
 {$IMPLICITBUILD OFF}
 

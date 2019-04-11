@@ -321,7 +321,7 @@ under the License.
 
 {$I TPLB3.Common.inc}
 
-unit TPLB3.OpenSSL experimental;
+unit TPLB3.OpenSSL;
 //  {$IFDEF VER150}
 //  unit uTPLb_OpenSSL;
 //  {$ENDIF}
@@ -330,7 +330,11 @@ unit TPLB3.OpenSSL experimental;
 //  unit TPLB3.OpenSSL experimental;
 //  {$IFEND}
 
-{$define OpenSSL_Win64_NotYetSupported}
+{$REGION 'History'}
+//  04-Apr-2019 - Tested
+//  05-Apr-2019 - Removed experimental directive
+{$ENDREGION}
+{-$define OpenSSL_Win64_NotYetSupported}
 // Undefine the above, when someone has tested the TOpenSSL_Signatory component
 //  for 64-bit platform.
 
@@ -701,13 +705,7 @@ TOpenSSL_Base = class
   end;
 
 
-{$IF CompilerVersion >= 23.0}
-  {$IFDEF OpenSSL_Win64_NotYetSupported}
   [ComponentPlatformsAttribute( pidWin32)] // Just 32-bit for the moment.
-  {$ELSE}
-  [ComponentPlatformsAttribute( pidWin32, pidWin64)]
-  {$ENDIF}
-{$IFEND}
 TOpenSSL_Signatory = class( TOpenSSL_Base)
   private
     FRSA: PRSA;
@@ -782,13 +780,7 @@ TOpenSSL_PaddingScheme = (
   padNone,
   padPKCS);
 
-{$IF CompilerVersion >= 23.0}
-  {$IFDEF OpenSSL_Win64_NotYetSupported}
-  [ComponentPlatformsAttribute( pidWin32)] // Just 32-bit for the moment.
-  {$ELSE}
-  [ComponentPlatformsAttribute( pidWin32, pidWin64)]
-  {$ENDIF}
-{$IFEND}
+[ComponentPlatformsAttribute( pidWin32)] // Just 32-bit for the moment.
 TOpenSSL_Codec = class( TOpenSSL_Base)
   private
     FCipher: TCipherToEncryptPrivateKeyWith;
@@ -1182,6 +1174,9 @@ end;
 procedure TOpenSSL_Signatory.GenRSA(
   KeySizeInBits: integer;
   var ErrorCode: integer; var ErrorMsg: string);
+{$REGION 'History'}
+//  05-Apr-2019 - AV: Key Generation causes an AV in Win64
+{$ENDREGION}
 var
   bn: PBIGNUM;
   Ok: boolean;
@@ -1210,9 +1205,13 @@ try
   cb.ver   := 2;
   cb.arg   := pointer( self);
   @cb.cb_2 := @cb_2_SpringBoard;
-  if Ok then
-    begin
-    Ok := FOpenSSLProc_RSA_generate_key_ex( FRSA, KeySizeInBits, bn, @cb) = 1;
+        if Ok then begin
+          {TODO Key Generation causes an AV in Win64 }
+          /// <remarks>
+          ///   Key Generation causes an AV in Win64 with cb, I checked the headers and they all match
+          ///   cb is used for progress which doesn't appear to be an issue at the moment.
+          /// </remarks>
+          Ok := FOpenSSLProc_RSA_generate_key_ex(FRSA, KeySizeInBits, bn, {$IFDEF WIN32} @cb {$ELSE WIN64} nil {$ENDIF}) = 1;
     if Ok then
         begin
         FCachedSize := KeySizeInBits;
