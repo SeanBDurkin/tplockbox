@@ -1,0 +1,9 @@
+*.dcu
+__history
+__recovery
+*.exe
+*.local
+*.identcache
+*.rsm
+*.skincfg
+*.stat

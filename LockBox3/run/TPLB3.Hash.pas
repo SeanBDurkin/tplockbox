@@ -29,7 +29,7 @@ and earlier was TurboPower Software.
  * ***** END LICENSE BLOCK ***** *}
 
 {$I TPLB3.Common.inc}
-
+{$WARN SYMBOL_DEPRECATED OFF} // Symbol ‘%s’ is deprecated
 unit TPLB3.Hash;
 interface
 uses Classes, SysUtils, TPLB3.StreamCipher,

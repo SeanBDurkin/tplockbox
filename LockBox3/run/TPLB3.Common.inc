@@ -1,3 +1,4 @@
+{$T-} { Typed @ operator }
 // XE4 introduces the ability to terminate $IF blocks with $ENDIF,
 // and the next-generation (i.e. mobile) compilers deprecate $IFEND
 // altogether. This directive suppresses deprecation warnings on

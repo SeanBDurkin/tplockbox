@@ -113,7 +113,6 @@ type
     Shape3: TShape;
     lblKeyStorageFile: TLabel;
     lblPrimalityTests: TLabel;
-    btnRSAGen: TButton;
     btnAbortGen: TButton;
     edtKeyStorageFile: TButtonedEdit;
     btnStoreFullKey: TButton;
@@ -186,6 +185,12 @@ type
     actOpenSSLVerify: TAction;
     dlgOpenPEM: TOpenDialog;
     dlgSavePEM: TSaveDialog;
+    edtKeyBase64: TMemo;
+    btLoadPublicBase64Key: TButton;
+    btBurnAll: TButton;
+    cbOSSLKeySize: TComboBox;
+    cbRSAKeySize: TComboBox;
+    btnRSAGen: TButton;
     procedure FormCreate( Sender: TObject );
     procedure edtPlaintextFileRightButtonClick( Sender: TObject );
     procedure edtCiphertextFileRightButtonClick( Sender: TObject );
@@ -257,6 +262,7 @@ type
     procedure actHashExecute( Sender: TObject );
     procedure actAbortHashExecute( Sender: TObject );
     procedure actAbortHashUpdate( Sender: TObject );
+    procedure actmngrMainDemoActionsUpdate(Action: TBasicAction; var Handled: Boolean);
     function ScribbleHashProgress( Sender: TObject;
       CountBytesProcessed: Int64 ): Boolean;
     procedure btnComputeHashClick( Sender: TObject );
@@ -278,6 +284,8 @@ type
     procedure actOpenSSLSignUpdate( Sender: TObject );
     procedure actOpenSSLVerifyExecute( Sender: TObject );
     procedure actOpenSSLVerifyUpdate( Sender: TObject );
+    procedure btBurnAllClick(Sender: TObject);
+    procedure btLoadPublicBase64KeyClick(Sender: TObject);
     procedure edtOpenSSLDocumentRightButtonClick( Sender: TObject );
     procedure edtOpenSSLSignatureRightButtonClick( Sender: TObject );
     function SigProgress( Sender: TObject; p1, p2: Integer ): Boolean;
@@ -321,11 +329,15 @@ implementation
 uses TPLB3.Random, uDemoBlockModeCipher, TPLB3.Constants, TPLB3.Asymetric,
   TPLB3.StreamUtils, TPLB3.StreamCipher, TPLB3.CodecIntf,
   TPLB3.DES, TPLB3.StreamToBlock, TPLB3.AES, TPLB3.CBC,
+  TPLB3.XXTEA, Types, System.IniFiles;
 
-  TPLB3.XXTEA, Types;
 {$R *.dfm}
 
 procedure TmfmLockbox3_Demo.FormCreate( Sender: TObject );
+{$REGION 'History'}
+//  04-Apr-2019 - allow storing OpenSSL location
+{$ENDREGION}
+const MyOpenSSLIni = 'c:\MyOpenSSL.ini';
 begin
   FOp := opIdle;
   FdidPressAbortEncrypt := False;
@@ -336,7 +348,14 @@ begin
   rgChainClick( nil );
   rgCipherClick( nil );
   FScribblePad_EntropyBag := TMemoryStream.Create;
-  TDemoBlockModeCipher.SelfRegister( CryptographicLibrary1 )
+  TDemoBlockModeCipher.SelfRegister( CryptographicLibrary1 );
+  if FileExists(MyOpenSSLIni) then
+    with TIniFile.Create(MyOpenSSLIni) do
+    try
+      edtOpenSSLLibPath.Text := ReadString({$IF defined(WIN32)}'WIN32'{$ELSEIF defined(WIN64)}'WIN64'{$IFEND}, 'OpenSSLDll', '');
+    finally
+      Free;
+    end;
 end;
 
 procedure TmfmLockbox3_Demo.FormDestroy( Sender: TObject );
@@ -977,6 +996,7 @@ procedure TmfmLockbox3_Demo.actRSAGenExecute( Sender: TObject );
 begin
   Busy;
   Log( 'Generating RSA keys' );
+  Signatory1.Codec.AsymetricKeySizeInBits := StrToInt(cbRSAKeySize.Text);
   LogFmt( 'Two key pairs will be created, each of %d bits.',
     [Signatory1.Codec.AsymetricKeySizeInBits] );
   FdidPressAbortEncrypt := False;
@@ -992,8 +1012,12 @@ begin
 end;
 
 procedure TmfmLockbox3_Demo.actRSAGenUpdate( Sender: TObject );
-begin ( Sender as TAction )
-  .Enabled := FOp = opIdle
+{$REGION 'History'}
+//  05-Apr-2019 - Added cbRSAKeySize Enabled
+{$ENDREGION}
+begin
+  (Sender as TAction).Enabled := FOp = opIdle;
+  cbRSAKeySize.Enabled :=  (Sender as TAction).Enabled;
 end;
 
 procedure TmfmLockbox3_Demo.actAbortRSAGenExecute( Sender: TObject );
@@ -1044,15 +1068,18 @@ end;
 procedure TmfmLockbox3_Demo.actLoadFullKeyExecute( Sender: TObject );
 // For first the CryptoKeys and then the Signing Keys,
 // load n, e and d.
+{$REGION 'History'}
+//  05-Apr-2019 - Source was not being used and generated a warning
+{$ENDREGION}
 var
   s: string;
   Store: TStream;
-  Source: ansistring;
+//  Source: ansistring;
 begin
   s := edtKeyStorageFile.Text;
   try
     Store := TFileStream.Create( s, fmOpenRead );
-    Source := Stream_to_Base64( Store );
+//    Source := Stream_to_Base64(Store);
     Store.Position := 0;
     try
       Signatory1.LoadKeysFromStream( Store, [partPublic, partPrivate] );
@@ -1074,6 +1101,9 @@ end;
 procedure TmfmLockbox3_Demo.actLoadPublicKeyExecute( Sender: TObject );
 // For first the CryptoKeys and then the Signing Keys,
 // load n and e. d should be cleared.
+{$REGION 'History'}
+//  04-Apr-2019 - Writing Pub Key to Log in Base64
+{$ENDREGION}
 var
   s: string;
   Store: TStream;
@@ -1083,8 +1113,9 @@ begin
     Store := TFileStream.Create( s, fmOpenRead );
     try
       Signatory1.LoadKeysFromStream( Store, [partPublic] );
-      LogFmt( 'Crypto & Signing keys, public parts only,' +
-          ' loaded from file "%s".', [s] );
+      LogFmt('Crypto & Signing keys, public parts only,' + ' loaded from file "%s".', [s]);
+      Log('Base64: ');
+      Log(Stream_to_Base64(Store));
     finally
       Store.Free
     end
@@ -1094,8 +1125,9 @@ begin
 end;
 
 procedure TmfmLockbox3_Demo.actLoadPublicKeyUpdate( Sender: TObject );
-begin ( Sender as TAction )
-  .Enabled := ( CurrentOperation = opIdle )
+//  04-Apr-2019 - Enable/Disable btLoadPublicBase64Key
+begin
+  (Sender as TAction).Enabled := (CurrentOperation = opIdle);
 end;
 
 procedure TmfmLockbox3_Demo.actStorePublicKeyExecute( Sender: TObject );
@@ -1384,8 +1416,11 @@ begin
 end;
 
 procedure TmfmLockbox3_Demo.actVerifyUpdate( Sender: TObject );
-begin ( Sender as TAction )
-  .Enabled := ( FOp = opIdle ) and ( partPrivate in Signatory1.HasParts )
+{$REGION 'History'}
+//  04-Apr-2019 - BUG: Only needs public Parts
+{$ENDREGION}
+begin
+  (Sender as TAction).Enabled := (FOp = opIdle) and (partPublic in Signatory1.HasParts);
 end;
 {$WARNINGS OFF}
 
@@ -1466,9 +1501,22 @@ begin
   pressedAbortHash := True
 end;
 
-procedure TmfmLockbox3_Demo.actAbortHashUpdate( Sender: TObject );
-begin ( Sender as TAction )
-  .Enabled := ( CurrentOperation = opHash ) and ( not pressedAbortHash )
+procedure TmfmLockbox3_Demo.actAbortHashUpdate(Sender: TObject);
+begin
+  (Sender as TAction).Enabled := (CurrentOperation = opHash) and (not pressedAbortHash)
+end;
+
+procedure TmfmLockbox3_Demo.actmngrMainDemoActionsUpdate(Action: TBasicAction; var Handled: Boolean);
+{$REGION 'History'}
+//  04-Apr-2019 - Created: Generic Updating
+//              - Enable/Disable btLoadPublicBase64Key
+{$ENDREGION}
+var s : string;
+begin
+  btBurnAll.Enabled := (CurrentOperation = opIdle) and (Signatory1.HasParts <> []);
+  s := edtKeyBase64.Lines[0];
+  s.Trim;
+  btLoadPublicBase64Key.Enabled := (CurrentOperation = opIdle) and (s<>'') and not (s.StartsWith('<') and s.EndsWith('>'));
 end;
 
 function TmfmLockbox3_Demo.ScribbleHashProgress( Sender: TObject;
@@ -1526,8 +1574,11 @@ begin ( Sender as TAction )
 end;
 
 procedure TmfmLockbox3_Demo.actOpenSSLGenKeyExecute( Sender: TObject );
+{$REGION 'History'}
+//  11-Apr-2019 - Allow custom Key Size
+{$ENDREGION}
 begin
-  Sig.AsymetricKeySizeInBits := 2048;
+  Sig.AsymetricKeySizeInBits := StrToInt(cbOSSLKeySize.Text);
   CurrentOperation := opOpenSSL;
   if Sig.GenerateKeys then
     PutLinuxLines( Sig.Print )
@@ -1545,8 +1596,12 @@ begin
 end;
 
 procedure TmfmLockbox3_Demo.actOpenSSLGenKeyUpdate( Sender: TObject );
-begin ( Sender as TAction )
-  .Enabled := Sig.isLoaded and ( CurrentOperation = opIdle )
+{$REGION 'History'}
+//  05-Apr-2019 - Added cbOSSLKeySize Enabled
+{$ENDREGION}
+begin
+  (Sender as TAction).Enabled := Sig.isLoaded and (CurrentOperation = opIdle);
+  cbOSSLKeySize.Enabled := (Sender as TAction).Enabled;
 end;
 
 procedure TmfmLockbox3_Demo.actOpenSSLLoadPrivateKeyExecute( Sender: TObject );
@@ -1754,20 +1809,46 @@ begin
   CurrentOperation := opIdle
 end;
 
-procedure TmfmLockbox3_Demo.actOpenSSLVerifyUpdate( Sender: TObject );
-begin ( Sender as TAction )
-  .Enabled := ( partPublic in Sig.HasParts ) and
-    ( edtOpenSSLDocument.Text <> '' ) and ( edtOpenSSLSignature.Text <> '' )
-    and ( CurrentOperation = opIdle )
+procedure TmfmLockbox3_Demo.actOpenSSLVerifyUpdate(Sender: TObject);
+begin
+  (Sender as TAction).Enabled := (partPublic in Sig.HasParts) and (edtOpenSSLDocument.Text <> '') and (edtOpenSSLSignature.Text <> '') and (CurrentOperation = opIdle)
 end;
 
-procedure TmfmLockbox3_Demo.edtOpenSSLDocumentRightButtonClick
-  ( Sender: TObject );
+procedure TmfmLockbox3_Demo.btBurnAllClick(Sender: TObject);
+begin
+  Signatory1.Burn;
+end;
+
+procedure TmfmLockbox3_Demo.btLoadPublicBase64KeyClick(Sender: TObject);
+{$REGION 'History'}
+//  04-Apr-2019 - Added to allow loading a Base64 Pub Key
+{$ENDREGION}
+var
+  s: string;
+  Store: TStream;
+begin
+  s := edtKeyBase64.Text;
+  s.Trim;
+  try
+    Store := TMemoryStream.Create();
+    try
+      Base64_to_stream(s, Store);
+      Store.Position := 0;
+      Signatory1.LoadKeysFromStream(Store, [partPublic]);
+      Log('Crypto & Signing keys, public parts only,' + ' loaded from Base64');
+    finally
+      Store.Free
+    end
+  except
+    LogFmt('Unable to open file "%s".', [s]);
+  end
+end;
+
+procedure TmfmLockbox3_Demo.edtOpenSSLDocumentRightButtonClick(Sender: TObject);
 var
   s: string;
 begin
-  if actSelectPlaintext.Execute then
-  begin
+  if actSelectPlaintext.Execute then begin
     s := actSelectPlaintext.Dialog.FileName;
     edtOpenSSLDocument.Text := s;
     edtOpenSSLSignature.Text := s + '_sig';
