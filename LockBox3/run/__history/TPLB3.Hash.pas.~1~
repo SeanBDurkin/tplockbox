@@ -102,7 +102,7 @@ TSimpleHash = class( TInterfacedPersistent, IHash, IEventOrigin, IHash_TestAcces
     procedure HashString( const Plaintext: string); overload;
 {$IFDEF UNICODE}
     procedure HashString( const Plaintext: string; Encoding: TEncoding); overload;
-    procedure Hashutf8string( const Plaintext: string);
+    procedure Hashutf8string( const Plaintext: string); deprecated;
 {$ENDIF}
     function  isUserAborted: boolean;
     procedure SetEventSender( Sender: TObject);

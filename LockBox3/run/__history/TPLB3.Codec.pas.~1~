@@ -149,11 +149,11 @@ TSimpleCodec = class( TInterfacedPersistent, ICodec, IBlockCipherSelector,
     procedure EncryptString( const Plaintext: string; var CipherText_Base64: string; Encoding: TEncoding); overload;
     procedure DecryptString( var Plaintext: string; const CipherText_Base64: string; Encoding: TEncoding); overload;
 
-    procedure EncryptAnsistring( const Plaintext: string; var CipherText_Base64: string);
-    procedure DecryptAnsistring( var Plaintext: string; const CipherText_Base64: string);
+    procedure EncryptAnsistring( const Plaintext: string; var CipherText_Base64: string); deprecated;
+    procedure DecryptAnsistring( var Plaintext: string; const CipherText_Base64: string); deprecated;
 
-    procedure EncryptUtf8string( const Plaintext: string; var CipherText_Base64: string);
-    procedure DecryptUtf8string( var Plaintext: string; const CipherText_Base64: string);
+    procedure EncryptUtf8string( const Plaintext: string; var CipherText_Base64: string); deprecated;
+    procedure DecryptUtf8string( var Plaintext: string; const CipherText_Base64: string); deprecated;
 {$ENDIF}
 
     function  GetAborted: boolean;
